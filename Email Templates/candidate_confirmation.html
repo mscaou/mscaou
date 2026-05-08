@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body
+    style="margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7fa;">
+    <table role="presentation" style="width: 100%; border-collapse: collapse;">
+        <tr>
+            <td align="center" style="padding: 40px 20px;">
+                <table role="presentation"
+                    style="width: 100%; max-width: 600px; border-collapse: collapse; background: #ffffff; border-radius: 16px; box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);">
+
+                    <!-- Header -->
+                    <tr>
+                        <td
+                            style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 40px 40px 30px; border-radius: 16px 16px 0 0; text-align: center;">
+                            <div style="font-size: 48px; margin-bottom: 16px;">📅</div>
+                            <h1 style="margin: 0; color: #ffffff; font-size: 28px; font-weight: 600;">Meeting Confirmed!
+                            </h1>
+                            <p style="margin: 10px 0 0; color: rgba(255,255,255,0.9); font-size: 16px;">{{app_name}}</p>
+                        </td>
+                    </tr>
+
+                    <!-- Greeting -->
+                    <tr>
+                        <td style="padding: 40px 40px 20px;">
+                            <p style="margin: 0; font-size: 18px; color: #333333;">Hello <strong>{{to_name}}</strong>,
+                            </p>
+                            <p style="margin: 16px 0 0; font-size: 16px; color: #555555; line-height: 1.6;">
+                                Great news! Your meeting has been successfully scheduled. Here are your booking details:
+                            </p>
+                        </td>
+                    </tr>
+
+                    <!-- Meeting Details Card -->
+                    <tr>
+                        <td style="padding: 0 40px 30px;">
+                            <table role="presentation"
+                                style="width: 100%; border-collapse: collapse; background: linear-gradient(135deg, #f8f9ff 0%, #f0f4ff 100%); border-radius: 12px; border: 1px solid #e0e7ff;">
+                                <tr>
+                                    <td style="padding: 24px;">
+                                        <table role="presentation" style="width: 100%; border-collapse: collapse;">
+                                            <tr>
+                                                <td style="padding: 12px 0; border-bottom: 1px solid #e0e7ff;">
+                                                    <span style="font-size: 14px; color: #6b7280; display: block;">📆
+                                                        Date</span>
+                                                    <span
+                                                        style="font-size: 18px; color: #1f2937; font-weight: 600;">{{meeting_date}}</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding: 12px 0; border-bottom: 1px solid #e0e7ff;">
+                                                    <span style="font-size: 14px; color: #6b7280; display: block;">🕐
+                                                        Time</span>
+                                                    <span
+                                                        style="font-size: 18px; color: #1f2937; font-weight: 600;">{{meeting_time}}</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding: 12px 0;">
+                                                    <span style="font-size: 14px; color: #6b7280; display: block;">⏱️
+                                                        Duration</span>
+                                                    <span
+                                                        style="font-size: 18px; color: #1f2937; font-weight: 600;">{{meeting_duration}}</span>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+
+                    <!-- Notes Section -->
+                    <tr>
+                        <td style="padding: 0 40px 30px;">
+                            <div
+                                style="background: #fffbeb; border-radius: 8px; padding: 16px; border-left: 4px solid #f59e0b;">
+                                <p style="margin: 0 0 8px; font-size: 14px; color: #92400e; font-weight: 600;">📝 Your
+                                    Notes</p>
+                                <p style="margin: 0; font-size: 14px; color: #78350f; line-height: 1.5;">{{notes}}</p>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <!-- Important Notice -->
+                    <tr>
+                        <td style="padding: 0 40px 30px;">
+                            <div
+                                style="background: #ecfdf5; border-radius: 8px; padding: 16px; border-left: 4px solid #10b981;">
+                                <p style="margin: 0; font-size: 14px; color: #065f46; line-height: 1.5;">
+                                    <strong>💡 Reminder:</strong> Please arrive on time for your scheduled meeting. If
+                                    you need to reschedule or cancel, contact us as soon as possible.
+                                </p>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <!-- Footer -->
+                    <tr>
+                        <td
+                            style="background: #f9fafb; padding: 30px 40px; border-radius: 0 0 16px 16px; text-align: center; border-top: 1px solid #e5e7eb;">
+                            <p style="margin: 0 0 8px; font-size: 14px; color: #6b7280;">Need to make changes?</p>
+                            <p style="margin: 0; font-size: 14px;">
+                                <a href="mailto:{{contact_email}}"
+                                    style="color: #667eea; text-decoration: none; font-weight: 600;">{{contact_email}}</a>
+                            </p>
+                            <p style="margin: 24px 0 0; font-size: 12px; color: #9ca3af;">
+                                © 2026 {{app_name}}. All rights reserved.
+                            </p>
+                        </td>
+                    </tr>
+
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+
+</html>
