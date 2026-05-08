@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Book your meeting slot - Select an available time that works for you">
+
+    <title>MSC Meeting Scheduler - Book Your Slot</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/styles.css">
+
+    <!-- EmailJS SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+</head>
+
+<body>
+    <div class="page-wrapper">
+        <!-- Header -->
+        <header class="header" id="pageHeader">
+            <div class="container">
+                <div class="header-icon" id="headerIcon">📅</div>
+                <h1 id="headerTitle">MSC Meeting Scheduler</h1>
+                <p id="headerSubtitle">Select an available time slot for your interview</p>
+                <a href="index.html" class="back-to-home">← Back to All Interviews</a>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="container">
+                <!-- Available Slots Section -->
+                <section id="slotsSection" class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">
+                            <span class="icon">🗓️</span>
+                            Available Time Slots
+                        </h2>
+                    </div>
+                    <div id="slotsContainer">
+                        <!-- Slots will be loaded here -->
+                        <div class="flex-center" style="padding: 3rem;">
+                            <div class="spinner"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Booking Form -->
+                <section id="bookingFormCard" class="card hidden">
+                    <div class="card-header">
+                        <h2 class="card-title">
+                            <span class="icon">✍️</span>
+                            Complete Your Booking
+                        </h2>
+                    </div>
+
+                    <div class="mb-3">
+                        <div class="badge badge-primary">Selected Slot</div>
+                        <p id="selectedSlotInfo" class="mt-1" style="font-size: 1.1rem;"></p>
+                    </div>
+
+                    <form id="bookingForm">
+                        <div class="form-group">
+                            <label class="form-label" for="candidateName">
+                                Full Name <span class="required">*</span>
+                            </label>
+                            <input type="text" id="candidateName" class="form-input" placeholder="Enter your full name"
+                                required>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="candidateEmail">
+                                Email Address <span class="required">*</span>
+                            </label>
+                            <input type="email" id="candidateEmail" class="form-input"
+                                placeholder="Enter your email address" required>
+                            <p class="form-hint">We'll send a confirmation to this email</p>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="candidateNotes">
+                                Notes (Optional)
+                            </label>
+                            <textarea id="candidateNotes" class="form-textarea"
+                                placeholder="Any additional information or questions..." rows="3"></textarea>
+                        </div>
+
+                        <button type="submit" id="submitBtn" class="btn btn-primary btn-lg btn-block">
+                            📅 Confirm Booking
+                        </button>
+                    </form>
+                </section>
+
+                <!-- Success State -->
+                <section id="successCard" class="card hidden">
+                    <div class="success-state">
+                        <div class="success-icon">✓</div>
+                        <h2>Booking Confirmed!</h2>
+                        <p>Your meeting slot has been successfully booked.</p>
+
+                        <div class="success-details">
+                            <div class="detail-row">
+                                <span class="label">Interview</span>
+                                <span class="value" id="successType"></span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="label">Name</span>
+                                <span class="value" id="successName"></span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="label">Date</span>
+                                <span class="value" id="successDate"></span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="label">Time</span>
+                                <span class="value" id="successTime"></span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="label">Duration</span>
+                                <span class="value" id="successDuration"></span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="label">Email</span>
+                                <span class="value" id="successEmail"></span>
+                            </div>
+                        </div>
+
+                        <p class="mt-3" style="color: var(--text-muted);">
+                            A confirmation email has been sent to your email address.
+                        </p>
+
+                        <a href="index.html" class="btn btn-secondary mt-3">← Back to All Interviews</a>
+                    </div>
+                </section>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="container">
+                <div class="footer-contact">
+                    <a href="mailto:your-email@example.com" id="contactEmail">
+                        <span>📧</span>
+                        <span>your-email@example.com</span>
+                    </a>
+                    <a href="tel:+1234567890" id="contactPhone">
+                        <span>📞</span>
+                        <span>+1234567890</span>
+                    </a>
+                </div>
+                <p class="footer-note">
+                    Having trouble booking? Contact us and we'll help you find a suitable slot.
+                </p>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="spinner"></div>
+        <p>Loading...</p>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- Scripts -->
+    <script src="js/config.js"></script>
+    <script src="js/sheets-api.js"></script>
+    <script src="js/email.js"></script>
+    <script src="js/booking.js"></script>
+
+    <!-- Update contact info from config -->
+    <script>
+        document.getElementById('contactEmail').href = `mailto:${CONFIG.CONTACT_EMAIL}`;
+        document.getElementById('contactEmail').querySelector('span:last-child').textContent = CONFIG.CONTACT_EMAIL;
+        document.getElementById('contactPhone').href = `tel:${CONFIG.CONTACT_PHONE}`;
+        document.getElementById('contactPhone').querySelector('span:last-child').textContent = CONFIG.CONTACT_PHONE;
+    </script>
+</body>
+
+</html>
