@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Tokenizer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --brand-blue: #165D9E;
+            --brand-dark: #203A5F;
+            --brand-silver: #EAEAEA;
+            --brand-gray: #737373;
+        }
+        body { font-family: 'Inter', sans-serif; background-color: white; overflow: hidden; }
+        .token {
+            display: inline-block;
+            padding: 4px 10px;
+            margin: 4px;
+            border-radius: 6px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            border: 2px solid transparent;
+        }
+        .token-id {
+            display: block;
+            font-size: 0.7rem;
+            color: var(--brand-gray);
+            text-align: center;
+            margin-top: 2px;
+        }
+        .bg-token-1 { background-color: #e0f2fe; color: #0369a1; border-color: #bae6fd; }
+        .bg-token-2 { background-color: #f0f9ff; color: #075985; border-color: #e0f2fe; }
+        
+        .focus-ring:focus { outline: 2px solid var(--brand-blue); outline-offset: 2px; }
+    </style>
+</head>
+<body class="p-6 flex flex-col items-center justify-center min-h-screen">
+
+    <div class="w-full max-w-2xl bg-white rounded-2xl shadow-xl border border-[#EAEAEA] p-8">
+        <h2 class="text-2xl font-bold mb-2 text-[#203A5F]">Interactive Tokenizer</h2>
+        <p class="text-[#737373] mb-6 text-sm">Type your name or a sentence to see how the model "sees" it.</p>
+        
+        <input 
+            type="text" 
+            id="textInput" 
+            placeholder="Type here (e.g., 'Unhappy cat')" 
+            class="w-full p-4 text-xl border-2 border-[#EAEAEA] rounded-xl mb-8 focus:border-[#165D9E] outline-none transition-colors"
+            maxlength="100"
+        >
+
+        <div class="mb-4">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-[#737373] mb-3">Subword Tokens</h3>
+            <div id="tokenContainer" class="flex flex-wrap min-h-[80px] p-4 bg-[#F9FAFB] rounded-xl border border-[#EAEAEA]">
+                <!-- Tokens will appear here -->
+            </div>
+        </div>
+
+        <div class="mt-6 flex items-center justify-between text-xs text-[#737373]">
+            <span>Model Vocabulary: 50,257 tokens</span>
+            <span class="italic">Slide 4.2 Interactive</span>
+        </div>
+    </div>
+
+    <script>
+        const input = document.getElementById('textInput');
+        const container = document.getElementById('tokenContainer');
+
+        // Simple mock subword tokenizer logic for demonstration
+        function tokenize(text) {
+            if (!text.trim()) return [];
+            
+            // Split by space first
+            const words = text.trim().split(/\s+/);
+            let result = [];
+
+            words.forEach(word => {
+                // Mock subword splitting rules
+                if (word.toLowerCase() === "unhappy") {
+                    result.push({ text: "un", id: 1452 });
+                    result.push({ text: "happy", id: 8201 });
+                } else if (word.length > 7) {
+                    const mid = Math.floor(word.length / 2);
+                    result.push({ text: word.substring(0, mid), id: Math.floor(Math.random() * 50000) });
+                    result.push({ text: "##" + word.substring(mid), id: Math.floor(Math.random() * 50000) });
+                } else {
+                    result.push({ 
+                        text: word, 
+                        id: Math.floor(Math.random() * 50000) 
+                    });
+                }
+            });
+            return result;
+        }
+
+        function updateTokens() {
+            const text = input.value;
+            const tokens = tokenize(text);
+            container.innerHTML = '';
+
+            if (tokens.length === 0) {
+                container.innerHTML = '<span class="text-gray-400 italic text-sm">Start typing...</span>';
+                return;
+            }
+
+            tokens.forEach((token, index) => {
+                const wrapper = document.createElement('div');
+                wrapper.className = 'flex flex-col items-center';
+                
+                const tokenEl = document.createElement('span');
+                tokenEl.className = `token ${index % 2 === 0 ? 'bg-token-1' : 'bg-token-2'}`;
+                tokenEl.textContent = token.text;
+
+                const idEl = document.createElement('span');
+                idEl.className = 'token-id';
+                idEl.textContent = `#${token.id}`;
+
+                wrapper.appendChild(tokenEl);
+                wrapper.appendChild(idEl);
+                container.appendChild(wrapper);
+            });
+        }
+
+        input.addEventListener('input', updateTokens);
+        
+        // Initial state
+        input.value = "Unhappy cat";
+        updateTokens();
+    </script>
+</body>
+</html>

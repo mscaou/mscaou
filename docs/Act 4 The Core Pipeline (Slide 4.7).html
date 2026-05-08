@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Core Pipeline Visualizer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --brand-blue: #165D9E;
+            --brand-dark: #203A5F;
+            --brand-silver: #EAEAEA;
+            --brand-gray: #737373;
+        }
+        body { font-family: 'Inter', sans-serif; background-color: white; }
+        .step-active { color: var(--brand-blue); border-color: var(--brand-blue); }
+        .step-complete { background-color: var(--brand-blue); color: white; }
+        .connector { height: 2px; flex-grow: 1; background-color: #EAEAEA; transition: all 0.5s ease; }
+        .connector.active { background-color: var(--brand-blue); }
+        .card-transition { transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+    </style>
+</head>
+<body class="p-8 flex items-center justify-center min-h-screen">
+
+    <div class="w-full max-w-4xl">
+        <div class="text-center mb-12">
+            <h1 class="text-3xl font-bold text-[#203A5F] mb-2">The Bridge to Computation</h1>
+            <p class="text-[#737373]">Follow the journey from human language to machine vectors.</p>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="flex items-center mb-16 relative px-10">
+            <div id="step-1-point" class="w-12 h-12 rounded-full border-4 border-[#165D9E] flex items-center justify-center font-bold z-10 bg-white transition-all duration-500">1</div>
+            <div id="line-1" class="connector"></div>
+            <div id="step-2-point" class="w-12 h-12 rounded-full border-4 border-[#EAEAEA] flex items-center justify-center font-bold z-10 bg-white transition-all duration-500">2</div>
+            <div id="line-2" class="connector"></div>
+            <div id="step-3-point" class="w-12 h-12 rounded-full border-4 border-[#EAEAEA] flex items-center justify-center font-bold z-10 bg-white transition-all duration-500">3</div>
+            <div id="line-3" class="connector"></div>
+            <div id="step-4-point" class="w-12 h-12 rounded-full border-4 border-[#EAEAEA] flex items-center justify-center font-bold z-10 bg-white transition-all duration-500">4</div>
+        </div>
+
+        <!-- Content Cards -->
+        <div class="relative min-h-[300px]">
+            <!-- Stage 1 -->
+            <div id="stage-1" class="card-transition opacity-100 scale-100">
+                <div class="bg-white p-8 rounded-2xl border-2 border-[#165D9E] shadow-xl flex items-center gap-8">
+                    <div class="text-5xl">✍️</div>
+                    <div>
+                        <h3 class="text-xl font-bold text-[#203A5F] mb-2">Stage 1: Raw Text</h3>
+                        <p class="text-[#737373] leading-relaxed">Humans provide text as characters and symbols. To us, "Cat" means a feline. To the computer, it's just a sequence of Unicode bytes.</p>
+                        <div class="mt-4 p-3 bg-[#F9FAFB] font-mono text-sm rounded border border-[#EAEAEA]">Input: "The cat sat"</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stage 2 -->
+            <div id="stage-2" class="card-transition hidden opacity-0 scale-95">
+                <div class="bg-white p-8 rounded-2xl border-2 border-[#165D9E] shadow-xl flex items-center gap-8">
+                    <div class="text-5xl">✂️</div>
+                    <div>
+                        <h3 class="text-xl font-bold text-[#203A5F] mb-2">Stage 2: Tokenization</h3>
+                        <p class="text-[#737373] leading-relaxed">The tokenizer breaks text into discrete units (tokens). Sometimes these are words, often they are sub-word fragments like "un-" and "happy".</p>
+                        <div class="mt-4 flex gap-2">
+                            <span class="px-3 py-1 bg-blue-100 text-[#165D9E] rounded-md font-mono text-xs border border-blue-200">The</span>
+                            <span class="px-3 py-1 bg-blue-100 text-[#165D9E] rounded-md font-mono text-xs border border-blue-200">cat</span>
+                            <span class="px-3 py-1 bg-blue-100 text-[#165D9E] rounded-md font-mono text-xs border border-blue-200">sat</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stage 3 -->
+            <div id="stage-3" class="card-transition hidden opacity-0 scale-95">
+                <div class="bg-white p-8 rounded-2xl border-2 border-[#165D9E] shadow-xl flex items-center gap-8">
+                    <div class="text-5xl">🔢</div>
+                    <div>
+                        <h3 class="text-xl font-bold text-[#203A5F] mb-2">Stage 3: Token IDs</h3>
+                        <p class="text-[#737373] leading-relaxed">Each unique token is assigned a number (Index) from the model's fixed dictionary. This allows the model to "lookup" data efficiently.</p>
+                        <div class="mt-4 p-3 bg-[#203A5F] text-white font-mono text-sm rounded shadow-inner">
+                            [464, 3797, 3332]
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stage 4 -->
+            <div id="stage-4" class="card-transition hidden opacity-0 scale-95">
+                <div class="bg-white p-8 rounded-2xl border-2 border-[#165D9E] shadow-xl flex items-center gap-8">
+                    <div class="text-5xl">📐</div>
+                    <div>
+                        <h3 class="text-xl font-bold text-[#203A5F] mb-2">Stage 4: Vectors (Embeddings)</h3>
+                        <p class="text-[#737373] leading-relaxed">Finally, numbers become coordinates in high-dimensional space. The model now processes <b>geometry</b>, where "cat" is close to "dog".</p>
+                        <div class="mt-4 p-3 bg-[#EAEAEA] text-[#203A5F] font-mono text-xs rounded border border-gray-300">
+                            [0.12, -0.45, 0.88, 0.01, ..., +1532 more]
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Controls -->
+        <div class="mt-12 flex justify-center gap-4">
+            <button id="prevBtn" class="px-8 py-3 bg-[#EAEAEA] text-[#737373] rounded-full font-bold hover:bg-gray-300 transition-all disabled:opacity-30" disabled>Previous</button>
+            <button id="nextBtn" class="px-8 py-3 bg-[#165D9E] text-white rounded-full font-bold hover:bg-[#203A5F] transition-all">Next Stage</button>
+        </div>
+    </div>
+
+    <script>
+        let currentStage = 1;
+        const totalStages = 4;
+
+        const nextBtn = document.getElementById('nextBtn');
+        const prevBtn = document.getElementById('prevBtn');
+
+        function updateUI() {
+            // Hide all stages
+            for (let i = 1; i <= totalStages; i++) {
+                const stage = document.getElementById(`stage-${i}`);
+                const point = document.getElementById(`step-${i}-point`);
+                const line = document.getElementById(`line-${i-1}`);
+
+                if (i === currentStage) {
+                    stage.classList.remove('hidden');
+                    setTimeout(() => {
+                        stage.classList.remove('opacity-0', 'scale-95');
+                        stage.classList.add('opacity-100', 'scale-100');
+                    }, 10);
+                } else {
+                    stage.classList.add('hidden', 'opacity-0', 'scale-95');
+                }
+
+                // Points styling
+                if (i <= currentStage) {
+                    point.classList.add('bg-[#165D9E]', 'text-white', 'border-[#165D9E]');
+                } else {
+                    point.classList.remove('bg-[#165D9E]', 'text-white', 'border-[#165D9E]');
+                    point.classList.add('bg-white', 'border-[#EAEAEA]');
+                }
+
+                // Lines styling
+                if (line && i <= currentStage) {
+                    line.classList.add('active');
+                } else if (line) {
+                    line.classList.remove('active');
+                }
+            }
+
+            // Button states
+            prevBtn.disabled = currentStage === 1;
+            nextBtn.textContent = currentStage === totalStages ? "Restart" : "Next Stage";
+        }
+
+        nextBtn.addEventListener('click', () => {
+            if (currentStage < totalStages) {
+                currentStage++;
+            } else {
+                currentStage = 1;
+            }
+            updateUI();
+        });
+
+        prevBtn.addEventListener('click', () => {
+            if (currentStage > 1) {
+                currentStage--;
+                updateUI();
+            }
+        });
+    </script>
+</body>
+</html>

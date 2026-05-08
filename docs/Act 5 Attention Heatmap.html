@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attention Heatmap Grid</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --brand-blue: #165D9E;
+            --brand-dark: #203A5F;
+            --brand-silver: #EAEAEA;
+            --brand-gray: #737373;
+        }
+
+        body {
+            background-color: white;
+            color: var(--brand-dark);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .heatmap-container {
+            display: grid;
+            grid-template-columns: auto repeat(9, 1fr);
+            gap: 2px;
+        }
+
+        .cell {
+            aspect-ratio: 1 / 1;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            border-radius: 2px;
+        }
+
+        .cell:hover {
+            outline: 2px solid var(--brand-dark);
+            z-index: 10;
+            transform: scale(1.1);
+        }
+
+        .label-row {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--brand-gray);
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 8px;
+            white-space: nowrap;
+        }
+
+        .label-col {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--brand-gray);
+            writing-mode: vertical-rl;
+            transform: rotate(180deg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding-bottom: 8px;
+        }
+
+        .highlight-row { background-color: #f1f5f9; }
+        .highlight-col { background-color: #f1f5f9; }
+
+        .tooltip {
+            pointer-events: none;
+            transition: opacity 0.2s;
+            background: var(--brand-dark);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            position: absolute;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body class="p-4 md:p-12 flex items-center justify-center min-h-screen">
+
+    <div class="max-w-4xl w-full bg-white rounded-3xl p-8 border border-brand-silver shadow-sm relative">
+        <div class="mb-10 flex justify-between items-end">
+            <div>
+                <h2 class="text-3xl font-bold text-brand-dark">Attention Heatmap</h2>
+                <p class="text-brand-gray">Visualizing the $N \times N$ relationship matrix.</p>
+            </div>
+            <div class="flex items-center gap-3">
+                <span class="text-xs font-bold text-brand-gray">LOW</span>
+                <div class="h-4 w-32 bg-gradient-to-r from-[#EAEAEA] to-[#165D9E] rounded"></div>
+                <span class="text-xs font-bold text-brand-blue">HIGH</span>
+            </div>
+        </div>
+
+        <div class="relative">
+            <div id="tooltip" class="tooltip opacity-0"></div>
+            
+            <div id="heatmap" class="heatmap-container">
+                <!-- Labels and cells will be injected here -->
+            </div>
+        </div>
+
+        <div class="mt-10 grid grid-cols-2 gap-8 border-t border-brand-silver pt-8">
+            <div class="flex items-start gap-4">
+                <div class="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center text-brand-blue shrink-0">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    </svg>
+                </div>
+                <div>
+                    <h4 class="font-bold text-brand-dark uppercase text-xs tracking-widest">Global View</h4>
+                    <p class="text-sm text-brand-gray mt-1">Unlike a sequence view, the heatmap reveals clusters of attention and asymmetric relationships.</p>
+                </div>
+            </div>
+            <div class="flex items-start gap-4">
+                <div class="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center text-brand-blue shrink-0">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    </svg>
+                </div>
+                <div>
+                    <h4 class="font-bold text-brand-dark uppercase text-xs tracking-widest">Diagonal Pattern</h4>
+                    <p class="text-sm text-brand-gray mt-1">Strong diagonal weights show tokens attending to themselves or adjacent neighbors.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const tokens = ["The", "cat", "chased", "the", "mouse", "because", "it", "was", "hungry"];
+        
+        // Simulating some meaningful attention weights
+        // Higher values for: self-attention (diagonal), related nouns (cat/mouse/it), verbs
+        function getWeight(row, col) {
+            if (row === col) return 0.8 + Math.random() * 0.2; // Strong self-attention
+            
+            // "it" (6) attends to "cat" (1) and "mouse" (4)
+            if (row === 6 && (col === 1 || col === 4)) return 0.7 + Math.random() * 0.2;
+            if ((row === 1 || row === 4) && col === 6) return 0.4; // Asymmetric
+            
+            // "hungry" (8) attends to "cat" (1)
+            if (row === 8 && col === 1) return 0.6;
+            
+            // "chased" (2) attends to "cat" (1) and "mouse" (4)
+            if (row === 2 && (col === 1 || col === 4)) return 0.55;
+
+            // Background noise
+            return Math.random() * 0.15;
+        }
+
+        const heatmap = document.getElementById('heatmap');
+        const tooltip = document.getElementById('tooltip');
+
+        function init() {
+            // Header Corner
+            heatmap.appendChild(document.createElement('div'));
+
+            // Column Labels
+            tokens.forEach(token => {
+                const label = document.createElement('div');
+                label.className = 'label-col';
+                label.innerText = token;
+                heatmap.appendChild(label);
+            });
+
+            // Grid Rows
+            tokens.forEach((rowToken, rIdx) => {
+                // Row Label
+                const label = document.createElement('div');
+                label.className = 'label-row';
+                label.innerText = rowToken;
+                heatmap.appendChild(label);
+
+                // Cells
+                tokens.forEach((colToken, cIdx) => {
+                    const weight = getWeight(rIdx, cIdx);
+                    const cell = document.createElement('div');
+                    cell.className = 'cell';
+                    cell.style.backgroundColor = `rgba(22, 93, 158, ${weight})`;
+                    
+                    cell.onmouseenter = (e) => showTooltip(e, rowToken, colToken, weight);
+                    cell.onmouseleave = hideTooltip;
+                    
+                    heatmap.appendChild(cell);
+                });
+            });
+        }
+
+        function showTooltip(e, row, col, val) {
+            tooltip.style.opacity = '1';
+            tooltip.innerHTML = `<strong>${row}</strong> → <strong>${col}</strong>: ${(val * 100).toFixed(1)}%`;
+            updateTooltipPos(e);
+        }
+
+        function updateTooltipPos(e) {
+            tooltip.style.left = (e.pageX + 15) + 'px';
+            tooltip.style.top = (e.pageY - 25) + 'px';
+        }
+
+        function hideTooltip() {
+            tooltip.style.opacity = '0';
+        }
+
+        init();
+        window.addEventListener('mousemove', (e) => {
+            if (tooltip.style.opacity === '1') updateTooltipPos(e);
+        });
+    </script>
+</body>
+</html>

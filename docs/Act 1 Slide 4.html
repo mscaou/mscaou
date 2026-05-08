@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Act 1 Slide 4 - Language Becomes the Control Surface</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FFFFFF;
+            color: #203A5F;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        h2 {
+            color: #165D9E;
+            font-size: 2.2rem;
+            position: absolute;
+            top: 20px;
+            text-align: center;
+            width: 100%;
+        }
+
+        .pipeline-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2rem;
+            position: relative;
+            margin-top: 40px;
+        }
+
+        /* 1. The Prompt (Control) */
+        .prompt-box {
+            background: #FAFAFA;
+            border: 2px solid #EAEAEA;
+            border-radius: 12px;
+            padding: 1.5rem 2rem;
+            width: 400px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            position: relative;
+        }
+
+        .prompt-label {
+            font-size: 0.9rem;
+            color: #737373;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+        }
+
+        .typing-text {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #203A5F;
+            min-height: 1.8rem;
+            font-family: monospace;
+        }
+
+        .typing-cursor {
+            display: inline-block;
+            width: 2px;
+            height: 1.5rem;
+            background-color: #203A5F;
+            animation: blink 1s infinite;
+            vertical-align: middle;
+        }
+
+        @keyframes blink {
+            50% {
+                opacity: 0;
+            }
+        }
+
+        /* Arrow */
+        .arrow-down {
+            font-size: 3rem;
+            color: #165D9E;
+            animation: pulseArrow 2s infinite;
+        }
+
+        @keyframes pulseArrow {
+
+            0%,
+            100% {
+                transform: translateY(0);
+                opacity: 0.5;
+            }
+
+            50% {
+                transform: translateY(5px);
+                opacity: 1;
+            }
+        }
+
+        /* 2. The Model (Engine) */
+        .model-box {
+            width: 150px;
+            height: 150px;
+            background: #203A5F;
+            border-radius: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 4rem;
+            box-shadow: 0 10px 20px rgba(32, 58, 95, 0.3);
+            transition: all 0.5s ease;
+            position: relative;
+        }
+
+        .model-internal {
+            position: absolute;
+            font-size: 0.8rem;
+            opacity: 0.3;
+            width: 100%;
+            text-align: center;
+        }
+
+        /* 3. The Output (Result) */
+        .output-container {
+            background: #E3F2FD;
+            border-radius: 12px;
+            padding: 1.5rem;
+            width: 400px;
+            min-height: 100px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            border: 2px dashed #165D9E;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
+        }
+
+        .output-text {
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: #165D9E;
+        }
+
+        /* Mode States */
+        .model-box.translate {
+            background: #4CAF50;
+            box-shadow: 0 10px 20px rgba(76, 175, 80, 0.4);
+        }
+
+        .model-box.code {
+            background: #212121;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        .model-box.creative {
+            background: #9C27B0;
+            box-shadow: 0 10px 20px rgba(156, 39, 176, 0.4);
+        }
+
+        .output-container.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+
+<body>
+
+    <h2>Language Becomes the Control Surface</h2>
+
+    <div class="pipeline-container">
+        <!-- Input -->
+        <div class="prompt-box">
+            <div class="prompt-label">Your Instruction (The Control)</div>
+            <div class="typing-text" id="typer"></div>
+        </div>
+
+        <!-- Flow -->
+        <div class="arrow-down">↓</div>
+
+        <!-- System -->
+        <div class="model-box" id="model">
+            <i class="fas fa-brain" id="model-icon">⚙️</i>
+        </div>
+
+        <!-- Output -->
+        <div class="output-container" id="output-box">
+            <div class="output-text" id="output-content"></div>
+        </div>
+    </div>
+
+    <script>
+        const scenarios = [
+            {
+                text: "Translate to Spanish: 'Hello'",
+                type: "translate",
+                icon: "🗣️",
+                output: "Hola"
+            },
+            {
+                text: "Write a Python function",
+                type: "code",
+                icon: "💻",
+                output: "def hello(): print('Hi')"
+            },
+            {
+                text: "Write a poem about space",
+                type: "creative",
+                icon: "🚀",
+                output: "Stars drift in semantic silence..."
+            }
+        ];
+
+        let currentIndex = 0;
+        const typer = document.getElementById('typer');
+        const model = document.getElementById('model');
+        const icon = document.getElementById('model-icon');
+        const outputBox = document.getElementById('output-box');
+        const outputContent = document.getElementById('output-content');
+
+        function typeWriter(text, i, fnCallback) {
+            if (i < (text.length)) {
+                typer.innerHTML = text.substring(0, i + 1) + '<span class="typing-cursor"></span>';
+                setTimeout(function () { typeWriter(text, i + 1, fnCallback) }, 50);
+            } else {
+                setTimeout(fnCallback, 500);
+            }
+        }
+
+        function runScenario() {
+            const scenario = scenarios[currentIndex];
+
+            // Reset
+            model.className = 'model-box';
+            icon.innerText = '⚙️';
+            outputBox.className = 'output-container';
+            outputContent.innerText = '';
+            typer.innerHTML = '<span class="typing-cursor"></span>';
+
+            // Start typing
+            typeWriter(scenario.text, 0, () => {
+                // Process
+                model.className = `model-box ${scenario.type}`;
+                icon.innerText = scenario.icon;
+
+                setTimeout(() => {
+                    outputBox.className = 'output-container show';
+                    outputContent.innerText = scenario.output;
+
+                    // Next loop
+                    setTimeout(() => {
+                        currentIndex = (currentIndex + 1) % scenarios.length;
+                        runScenario();
+                    }, 2500);
+                }, 500);
+            });
+        }
+
+        // Start
+        setTimeout(runScenario, 1000);
+
+    </script>
+</body>
+
+</html>

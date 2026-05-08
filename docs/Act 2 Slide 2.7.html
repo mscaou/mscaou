@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Act 2 Slide 2.7 - Key Reframe</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FFFFFF;
+            color: #203A5F;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        h2 {
+            color: #165D9E;
+            font-size: 3rem;
+            margin-bottom: 4rem;
+        }
+
+        .equation-container {
+            display: flex;
+            flex-direction: column;
+            gap: 4rem;
+            width: 80%;
+        }
+
+        .equation-row {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: #FAFAFA;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            position: relative;
+        }
+
+        .term {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+            width: 250px;
+        }
+
+        .icon {
+            font-size: 3.5rem;
+            color: #165D9E;
+        }
+
+        .operator {
+            font-size: 4rem;
+            color: #737373;
+            width: 80px;
+            text-align: center;
+            position: relative;
+        }
+
+        /* Animation for Not Equal */
+        .operator::after {
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 6px;
+            background: #F44336;
+            top: 50%;
+            left: 0;
+            transform: rotate(-20deg) scaleX(0);
+            transform-origin: center;
+            animation: slash 1s forwards;
+            animation-delay: 1s;
+        }
+
+        /* Specific animation delays */
+        .row-2 .operator::after {
+            animation-delay: 2.5s;
+        }
+
+        .term-text {
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 1.5rem;
+        }
+
+        .bad-term {
+            color: #737373;
+            opacity: 0.5;
+            transition: opacity 1s;
+        }
+
+        .row-2 .bad-term {
+            /* Animate opacity to show it's not the same */
+        }
+
+        @keyframes slash {
+            to {
+                transform: rotate(-20deg) scaleX(1);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <h2>Key Reframe</h2>
+
+    <div class="equation-container">
+
+        <!-- Row 1 -->
+        <div class="equation-row row-1">
+            <div class="term">
+                <i class="fas fa-database icon"></i>
+                <span class="term-text">Capacity</span>
+            </div>
+            <div class="operator">=</div>
+            <div class="term bad-term">
+                <i class="fas fa-brain icon" style="color: #737373;"></i>
+                <span class="term-text">Intelligence</span>
+            </div>
+        </div>
+
+        <!-- Row 2 -->
+        <div class="equation-row row-2">
+            <div class="term">
+                <i class="fas fa-chart-line icon"></i>
+                <span class="term-text">Scale</span>
+            </div>
+            <div class="operator">=</div>
+            <div class="term bad-term">
+                <i class="fas fa-cogs icon" style="color: #737373;"></i>
+                <span class="term-text">Reasoning</span>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+
+</html>

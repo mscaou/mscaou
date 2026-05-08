@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --brand-blue: #165D9E;
+            --brand-dark: #203A5F;
+            --brand-silver: #EAEAEA;
+        }
+        .token {
+            display: inline-block;
+            padding: 2px 6px;
+            margin: 2px;
+            border-radius: 4px;
+            background: var(--brand-silver);
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+        }
+        .token.visible { opacity: 1; transform: translateY(0); }
+        .token.highlight { background: var(--brand-blue); color: white; scale: 1.1; }
+        .context-box { border: 2px solid var(--brand-silver); transition: all 0.5s; }
+        .active-context { border-color: var(--brand-blue); background-color: #f8fafc; }
+    </style>
+</head>
+<body class="bg-white p-10 font-sans overflow-hidden">
+    <div class="max-w-4xl mx-auto h-[500px] flex flex-col">
+        <div class="flex justify-between items-center mb-8">
+            <h3 class="text-xl font-bold text-[#203A5F]">One Token at a Time</h3>
+            <button id="nextBtn" class="bg-[#165D9E] text-white px-6 py-3 rounded-xl font-bold hover:brightness-110 active:scale-95 transition-all">
+                PREDICT NEXT TOKEN
+            </button>
+        </div>
+
+        <div id="displayArea" class="flex-grow context-box rounded-2xl p-8 relative overflow-y-auto">
+            <div id="textContainer" class="text-2xl leading-relaxed">
+                <!-- Tokens will appear here -->
+            </div>
+            
+            <div id="stepCounter" class="absolute bottom-4 right-4 text-[#737373] text-sm font-mono">
+                Tokens in memory: 0
+            </div>
+        </div>
+
+        <div class="mt-6 flex items-center space-x-4 text-sm text-[#737373]">
+            <div class="flex items-center"><span class="w-3 h-3 bg-[#EAEAEA] rounded-full mr-2"></span> Context (Input)</div>
+            <div class="flex items-center"><span class="w-3 h-3 bg-[#165D9E] rounded-full mr-2"></span> Prediction (Output)</div>
+        </div>
+    </div>
+
+    <script>
+        const tokens = ["The", "secret", "to", "artificial", "intelligence", "is", "not", "reasoning,", "but", "very", "advanced", "pattern", "completion."];
+        let currentIndex = 0;
+        const container = document.getElementById('textContainer');
+        const btn = document.getElementById('nextBtn');
+        const counter = document.getElementById('stepCounter');
+        const display = document.getElementById('displayArea');
+
+        btn.onclick = () => {
+            if (currentIndex >= tokens.length) {
+                container.innerHTML = "";
+                currentIndex = 0;
+                btn.innerText = "PREDICT NEXT TOKEN";
+                display.classList.remove('active-context');
+                return;
+            }
+
+            // Highlight existing as context
+            const existing = document.querySelectorAll('.token');
+            existing.forEach(t => t.classList.remove('highlight'));
+            display.classList.add('active-context');
+
+            // Add new token
+            const span = document.createElement('span');
+            span.className = 'token highlight';
+            span.innerText = tokens[currentIndex];
+            container.appendChild(span);
+
+            setTimeout(() => {
+                span.classList.add('visible');
+                currentIndex++;
+                counter.innerText = `Tokens in memory: ${currentIndex}`;
+                
+                if (currentIndex === tokens.length) {
+                    btn.innerText = "START OVER";
+                }
+            }, 50);
+        };
+    </script>
+</body>
+</html>

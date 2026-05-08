@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --brand-blue: #165D9E;
+            --brand-dark: #203A5F;
+            --brand-silver: #EAEAEA;
+            --brand-gray: #737373;
+        }
+        body { font-family: 'Inter', sans-serif; background: transparent; overflow: hidden; }
+        .stat-card { transition: all 0.3s ease; }
+        .stat-card:hover { transform: translateY(-4px); }
+        .progress-bar { transition: width 1.5s ease-out; }
+    </style>
+</head>
+<body class="p-6 bg-white">
+    <div class="max-w-4xl mx-auto">
+        <div class="flex justify-between items-center mb-10">
+            <div>
+                <h1 class="text-3xl font-black text-[#203A5F] tracking-tight">Economic Scale & Adoption</h1>
+                <div class="h-1 w-20 bg-[#165D9E] mt-2"></div>
+            </div>
+            <div class="bg-[#EAEAEA] p-2 rounded-lg flex gap-1">
+                <button onclick="switchTab('market')" id="btn-market" class="px-4 py-1.5 rounded text-sm font-bold transition-all bg-white text-[#203A5F] shadow-sm">Market Growth</button>
+                <button onclick="switchTab('adoption')" id="btn-adoption" class="px-4 py-1.5 rounded text-sm font-bold transition-all text-[#737373] hover:text-[#203A5F]">Adoption</button>
+                <button onclick="switchTab('value')" id="btn-value" class="px-4 py-1.5 rounded text-sm font-bold transition-all text-[#737373] hover:text-[#203A5F]">Global Value</button>
+            </div>
+        </div>
+
+        <!-- Tab 1: Market Growth -->
+        <div id="tab-market" class="grid grid-cols-12 gap-6 animate-in fade-in duration-500">
+            <div class="col-span-12 md:col-span-5 flex flex-col justify-center">
+                <div class="mb-6">
+                    <p class="text-[#737373] text-sm uppercase font-bold tracking-widest mb-1">Projected LLM Market</p>
+                    <h2 class="text-5xl font-black text-[#165D9E]">$82.1B</h2>
+                    <p class="text-[#203A5F] font-semibold">by 2033 (33.7% CAGR)</p>
+                </div>
+                <div class="space-y-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-2 h-2 rounded-full bg-[#165D9E]"></div>
+                        <p class="text-sm text-[#203A5F]">2023 Value: <strong>$4.5B</strong></p>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <div class="w-2 h-2 rounded-full bg-[#203A5F]"></div>
+                        <p class="text-sm text-[#203A5F]">Retail Share: <strong>27.5%</strong></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-span-12 md:col-span-7 bg-[#EAEAEA] p-8 rounded-2xl flex items-end gap-4 h-64">
+                <div class="flex-1 flex flex-col items-center">
+                    <div class="w-full bg-[#203A5F] rounded-t-lg" style="height: 10%;"></div>
+                    <p class="mt-2 text-[10px] font-bold text-[#737373]">2023</p>
+                </div>
+                <div class="flex-1 flex flex-col items-center">
+                    <div class="w-full bg-[#203A5F] opacity-40 rounded-t-lg" style="height: 35%;"></div>
+                    <p class="mt-2 text-[10px] font-bold text-[#737373]">2027</p>
+                </div>
+                <div class="flex-1 flex flex-col items-center">
+                    <div class="w-full bg-[#165D9E] rounded-t-lg" style="height: 100%;"></div>
+                    <p class="mt-2 text-[10px] font-bold text-[#165D9E]">2033 PROJ.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab 2: Adoption -->
+        <div id="tab-adoption" class="hidden grid grid-cols-3 gap-6 animate-in fade-in duration-500">
+            <div class="stat-card bg-white border border-[#EAEAEA] p-6 rounded-2xl shadow-sm">
+                <div class="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center text-[#165D9E] mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                </div>
+                <h3 class="text-4xl font-black text-[#203A5F]">67%</h3>
+                <p class="text-sm text-[#737373] mt-2">Global organizations using LLMs in some capacity as of 2025.</p>
+            </div>
+            <div class="stat-card bg-[#203A5F] p-6 rounded-2xl shadow-sm text-white">
+                <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline><polyline points="16 7 22 7 22 13"></polyline></svg>
+                </div>
+                <h3 class="text-4xl font-black">88%</h3>
+                <p class="text-sm opacity-80 mt-2">Professionals report LLMs significantly improve work quality.</p>
+            </div>
+            <div class="stat-card bg-white border border-[#EAEAEA] p-6 rounded-2xl shadow-sm">
+                <div class="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center text-[#165D9E] mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+                </div>
+                <h3 class="text-4xl font-black text-[#203A5F]">80%</h3>
+                <p class="text-sm text-[#737373] mt-2">Workforce tasks expected to be affected/optimized by LLMs.</p>
+            </div>
+        </div>
+
+        <!-- Tab 3: Global Value -->
+        <div id="tab-value" class="hidden space-y-8 animate-in fade-in duration-500">
+            <div class="bg-[#203A5F] p-8 rounded-2xl text-white relative overflow-hidden">
+                <div class="relative z-10">
+                    <p class="uppercase text-xs font-bold tracking-tighter opacity-70 mb-2">Annual Global Economic Potential</p>
+                    <h3 class="text-5xl font-black mb-4">$4.4 TRILLION</h3>
+                    <p class="text-lg opacity-90 max-w-xl">Generative AI could add more annual value than the entire 2021 GDP of the United Kingdom ($3.1T).</p>
+                </div>
+                <!-- Abstract visual circles -->
+                <div class="absolute -right-20 -bottom-20 w-80 h-80 bg-white/5 rounded-full"></div>
+                <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-white/10 rounded-full"></div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-8 px-4">
+                <div class="space-y-2">
+                    <div class="flex justify-between text-xs font-bold text-[#203A5F]">
+                        <span>UK GDP (2021 Reference)</span>
+                        <span>$3.1T</span>
+                    </div>
+                    <div class="w-full bg-[#EAEAEA] h-3 rounded-full overflow-hidden">
+                        <div class="bg-[#737373] h-full" style="width: 70%;"></div>
+                    </div>
+                </div>
+                <div class="space-y-2">
+                    <div class="flex justify-between text-xs font-bold text-[#165D9E]">
+                        <span>GenAI Economic Potential</span>
+                        <span>$4.4T</span>
+                    </div>
+                    <div class="w-full bg-[#EAEAEA] h-3 rounded-full overflow-hidden">
+                        <div class="bg-[#165D9E] h-full" style="width: 100%;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-12 text-center text-[10px] text-[#737373] uppercase tracking-widest font-bold">
+            Data Sources: McKinsey & Co • McKinsey • Hostinger • arXiv
+        </div>
+    </div>
+
+    <script>
+        function switchTab(tab) {
+            // Hide all tabs
+            document.getElementById('tab-market').classList.add('hidden');
+            document.getElementById('tab-adoption').classList.add('hidden');
+            document.getElementById('tab-value').classList.add('hidden');
+            
+            // Reset buttons
+            const btns = ['market', 'adoption', 'value'];
+            btns.forEach(b => {
+                const el = document.getElementById('btn-' + b);
+                el.classList.remove('bg-white', 'text-[#203A5F]', 'shadow-sm');
+                el.classList.add('text-[#737373]');
+            });
+
+            // Show active tab
+            document.getElementById('tab-' + tab).classList.remove('hidden');
+            
+            // Set active button
+            const activeBtn = document.getElementById('btn-' + tab);
+            activeBtn.classList.add('bg-white', 'text-[#203A5F]', 'shadow-sm');
+            activeBtn.classList.remove('text-[#737373]');
+        }
+    </script>
+</body>
+</html>

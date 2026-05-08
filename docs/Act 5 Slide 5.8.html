@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Act 5 Slide 5.8 - Why Attention Scales</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FFFFFF;
+            color: #203A5F;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        h2 {
+            color: #165D9E;
+            font-size: 2.5rem;
+            position: absolute;
+            top: 20px;
+        }
+
+        .comparison-container {
+            width: 80%;
+            display: flex;
+            flex-direction: column;
+            gap: 3rem;
+        }
+
+        .row {
+            border: 2px solid #E0E0E0;
+            border-radius: 12px;
+            padding: 2rem;
+            position: relative;
+        }
+
+        .label {
+            position: absolute;
+            top: -15px;
+            left: 20px;
+            background: white;
+            padding: 0 10px;
+            font-weight: 700;
+            color: #737373;
+        }
+
+        .task-lane {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .task {
+            width: 80px;
+            height: 50px;
+            background: #E0E0E0;
+            border-radius: 6px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #aaa;
+            font-weight: 600;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .task::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 0%;
+            background: #165D9E;
+            transition: width 0s;
+        }
+
+        .task.processing::after {
+            width: 100%;
+            transition: width 1s linear;
+        }
+
+        .task.done::after {
+            width: 100%;
+            background: #4CAF50;
+        }
+
+        .clock {
+            margin-left: auto;
+            font-family: monospace;
+            font-size: 1.5rem;
+            color: #203A5F;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h2>Why Attention Scales</h2>
+
+    <div class="comparison-container">
+
+        <!-- Sequential -->
+        <div class="row" id="row-seq">
+            <div class="label">Sequential (RNN / LSTM)</div>
+            <div class="task-lane">
+                <div class="task" id="s1">T1</div>
+                <div class="task" id="s2">T2</div>
+                <div class="task" id="s3">T3</div>
+                <div class="task" id="s4">T4</div>
+                <div class="clock" id="clock-seq">0s</div>
+            </div>
+        </div>
+
+        <!-- Parallel -->
+        <div class="row" id="row-par">
+            <div class="label" style="color: #165D9E;">Parallel (Transformer)</div>
+            <div class="task-lane">
+                <div class="task" id="p1">T1</div>
+                <div class="task" id="p2">T2</div>
+                <div class="task" id="p3">T3</div>
+                <div class="task" id="p4">T4</div>
+                <div class="clock" id="clock-par">0s</div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        function runSeq() {
+            reset('s', 'clock-seq');
+            processSeq(1);
+        }
+
+        function processSeq(i) {
+            if (i > 4) return;
+            const el = document.getElementById('s' + i);
+            const clock = document.getElementById('clock-seq');
+            el.classList.add('processing');
+
+            setTimeout(() => {
+                el.classList.remove('processing');
+                el.classList.add('done');
+                clock.innerText = i + 's';
+                processSeq(i + 1);
+            }, 1000);
+        }
+
+        function runPar() {
+            reset('p', 'clock-par');
+            for (let i = 1; i <= 4; i++) {
+                const el = document.getElementById('p' + i);
+                el.classList.add('processing');
+            }
+
+            setTimeout(() => {
+                for (let i = 1; i <= 4; i++) {
+                    const el = document.getElementById('p' + i);
+                    el.classList.remove('processing');
+                    el.classList.add('done');
+                }
+                document.getElementById('clock-par').innerText = '1s';
+            }, 1000);
+        }
+
+        function reset(prefix, clockId) {
+            for (let i = 1; i <= 4; i++) {
+                const el = document.getElementById(prefix + i);
+                el.className = 'task';
+            }
+            document.getElementById(clockId).innerText = '0s';
+        }
+
+        setInterval(() => {
+            runSeq();
+            runPar();
+        }, 5000);
+
+        runSeq();
+        runPar();
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Act 5 Slide 5.9 - The Transformer Mental Model</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FFFFFF;
+            color: #203A5F;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        h2 {
+            color: #165D9E;
+            font-size: 2.5rem;
+            position: absolute;
+            top: 20px;
+        }
+
+        .pipeline {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-top: 2rem;
+            transform: scale(0.9);
+        }
+
+        .stage {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            width: 140px;
+            opacity: 0;
+            animation: fadeIn 0.5s forwards;
+            position: relative;
+        }
+
+        .box {
+            background: #FAFAFA;
+            border: 2px solid #203A5F;
+            border-radius: 12px;
+            padding: 1.5rem 1rem;
+            width: 100%;
+            text-align: center;
+            font-weight: 700;
+            color: #203A5F;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .desc {
+            font-size: 0.9rem;
+            color: #737373;
+            text-align: center;
+        }
+
+        .arrow {
+            font-size: 2rem;
+            color: #165D9E;
+            opacity: 0;
+            animation: fadeIn 0.5s forwards;
+        }
+
+        .stage:nth-child(1) {
+            animation-delay: 0.2s;
+        }
+
+        /* Input */
+        .stage:nth-child(2) .arrow {
+            animation-delay: 0.4s;
+        }
+
+        .stage:nth-child(3) {
+            animation-delay: 0.6s;
+        }
+
+        /* Embed */
+        .stage:nth-child(4) .arrow {
+            animation-delay: 0.8s;
+        }
+
+        .stage:nth-child(5) {
+            animation-delay: 1.0s;
+        }
+
+        /* Attention */
+        .stage:nth-child(6) .arrow {
+            animation-delay: 1.2s;
+        }
+
+        .stage:nth-child(7) {
+            animation-delay: 1.4s;
+        }
+
+        /* Layers */
+        .stage:nth-child(8) .arrow {
+            animation-delay: 1.6s;
+        }
+
+        .stage:nth-child(9) {
+            animation-delay: 1.8s;
+        }
+
+        /* Output */
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Pulsing data flow */
+        .data-dot {
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            background: #4CAF50;
+            border-radius: 50%;
+            top: 40%;
+            left: 0;
+            z-index: 100;
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h2>The Transformer Mental Model</h2>
+
+    <div class="pipeline">
+
+        <!-- 1. Tokens -->
+        <div class="stage">
+            <div class="box">Tokens</div>
+            <div class="desc">Input Numbers</div>
+        </div>
+
+        <div class="stage">
+            <div class="arrow">→</div>
+        </div>
+
+        <!-- 2. Vectors -->
+        <div class="stage">
+            <div class="box" style="background: #E3F2FD;">Vectors</div>
+            <div class="desc">Meaning Geometry</div>
+        </div>
+
+        <div class="stage">
+            <div class="arrow">→</div>
+        </div>
+
+        <!-- 3. Attention -->
+        <div class="stage">
+            <div class="box" style="border-color: #165D9E;">Attention</div>
+            <div class="desc">Context Relevance</div>
+        </div>
+
+        <div class="stage">
+            <div class="arrow">→</div>
+        </div>
+
+        <!-- 4. Layers (Refinement) -->
+        <div class="stage">
+            <div class="box">Layers</div>
+            <div class="desc">Refinement Loop</div>
+        </div>
+
+        <div class="stage">
+            <div class="arrow">→</div>
+        </div>
+
+        <!-- 5. Probability -->
+        <div class="stage">
+            <div class="box" style="background: #203A5F; color: white;">Probability</div>
+            <div class="desc">Next Token</div>
+        </div>
+
+    </div>
+
+</body>
+
+</html>

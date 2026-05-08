@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Behavioral Failure Simulator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --brand-blue: #165D9E;
+            --brand-dark: #203A5F;
+            --brand-silver: #EAEAEA;
+            --brand-gray: #737373;
+        }
+        .btn-active {
+            background-color: var(--brand-blue);
+            color: white;
+            box-shadow: 0 4px 6px -1px rgba(22, 93, 158, 0.4);
+        }
+        .btn-inactive {
+            background-color: var(--brand-silver);
+            color: var(--brand-gray);
+        }
+        .terminal {
+            background-color: #f8fafc;
+            border: 1px solid var(--brand-silver);
+            font-family: 'ui-monospace', 'SFMono-Regular', Menlo, Monaco, Consolas, monospace;
+        }
+        .error-tag {
+            background-color: #fee2e2;
+            color: #dc2626;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: bold;
+            display: inline-block;
+            margin: 2px;
+        }
+        .success-tag {
+            background-color: #dcfce7;
+            color: #16a34a;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body class="bg-white p-4 flex items-center justify-center min-h-screen">
+
+<div class="w-full max-w-2xl bg-white rounded-xl shadow-2xl border border-silver overflow-hidden">
+    <!-- Header -->
+    <div class="p-6 border-b border-silver bg-slate-50">
+        <h2 class="text-xl font-bold mb-1" style="color: var(--brand-dark);">The Reliability Spectrum</h2>
+        <p class="text-sm text-gray-500">Same prompt, different pattern capacity.</p>
+    </div>
+
+    <!-- Controls -->
+    <div class="p-4 flex gap-2 justify-center bg-white">
+        <button onclick="setScale('small')" id="btn-small" class="px-4 py-2 rounded-full text-sm font-bold transition-all btn-inactive">Small Model</button>
+        <button onclick="setScale('medium')" id="btn-medium" class="px-4 py-2 rounded-full text-sm font-bold transition-all btn-inactive">Medium Model</button>
+        <button onclick="setScale('large')" id="btn-large" class="px-4 py-2 rounded-full text-sm font-bold transition-all btn-active">Large Model</button>
+    </div>
+
+    <!-- Terminal -->
+    <div class="p-6">
+        <div class="text-[10px] uppercase font-bold text-gray-400 mb-2 tracking-widest">Input Prompt</div>
+        <div class="p-3 bg-gray-100 rounded-lg text-sm mb-6 border-l-4 border-blue-500">
+            "Write a short technical explanation of how quantum entanglement works for a 5-year old, and explain why it doesn't violate relativity."
+        </div>
+
+        <div class="text-[10px] uppercase font-bold text-gray-400 mb-2 tracking-widest">Model Output</div>
+        <div id="output-box" class="terminal p-4 rounded-lg min-h-[180px] text-sm leading-relaxed transition-opacity duration-300">
+            <!-- Content dynamic -->
+        </div>
+    </div>
+
+    <!-- Insight footer -->
+    <div id="insight-box" class="p-4 border-t border-silver text-xs italic text-center" style="color: var(--brand-gray);">
+        Large models maintain coherence over complex multiple constraints.
+    </div>
+</div>
+
+<script>
+    const data = {
+        small: {
+            text: "Quantum entanglement is like two magic socks. If you put one on your left foot, the other one knows <span class='error-tag'>HALLUCINATION</span> it is a cat. Relativity is about time traveling fast. They are both fast <span class='error-tag'>CONTEXT LOSS</span> so they are friends.",
+            insight: "Small models lose track of the prompt constraints almost immediately."
+        },
+        medium: {
+            text: "Imagine two magic coins. When one is heads, the other is tails instantly. This doesn't break rules because no message is sent. <span class='error-tag'>DRIFT</span> Actually, scientists use this to send emails faster than light, which is cool but confusing.",
+            insight: "Medium models handle the basics but often contradict themselves midway."
+        },
+        large: {
+            text: "Imagine two magic dice that always show the same number, even if they are in different rooms. <span class='success-tag'>COHERENT</span> Because no 'hidden note' is actually passed between them, Einstein’s rule about nothing traveling faster than light is still safe. It's just how the universe is connected.",
+            insight: "Large models balance the '5-year-old' tone with technical accuracy across the whole response."
+        }
+    };
+
+    function setScale(scale) {
+        // Update Buttons
+        ['small', 'medium', 'large'].forEach(s => {
+            const btn = document.getElementById(`btn-${s}`);
+            if (s === scale) {
+                btn.className = "px-4 py-2 rounded-full text-sm font-bold transition-all btn-active";
+            } else {
+                btn.className = "px-4 py-2 rounded-full text-sm font-bold transition-all btn-inactive";
+            }
+        });
+
+        // Update Content
+        const output = document.getElementById('output-box');
+        const insight = document.getElementById('insight-box');
+        
+        output.style.opacity = '0';
+        setTimeout(() => {
+            output.innerHTML = data[scale].text;
+            insight.textContent = data[scale].insight;
+            output.style.opacity = '1';
+        }, 200);
+    }
+
+    // Init
+    setScale('large');
+</script>
+
+</body>
+</html>

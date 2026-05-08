@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attention Explorer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --brand-blue: #165D9E;
+            --brand-dark: #203A5F;
+            --brand-silver: #EAEAEA;
+            --brand-gray: #737373;
+        }
+        body {
+            background-color: white;
+            color: black;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+        }
+        .token {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+        .token:hover {
+            border-color: var(--brand-blue);
+        }
+        .token.active {
+            background-color: var(--brand-blue);
+            color: white;
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(22, 93, 158, 0.3);
+        }
+        .attention-line {
+            transition: stroke-dashoffset 0.5s ease-in-out, stroke-width 0.3s ease;
+        }
+        .bg-brand-blue { background-color: var(--brand-blue); }
+        .text-brand-blue { color: var(--brand-blue); }
+        .border-brand-blue { border-color: var(--brand-blue); }
+    </style>
+</head>
+<body class="p-8 flex flex-col items-center justify-center min-h-screen">
+
+    <div class="max-w-4xl w-full bg-white rounded-2xl p-8 border border-gray-100 shadow-sm">
+        <div class="mb-8 text-center">
+            <h2 class="text-2xl font-bold mb-2" style="color: var(--brand-dark)">Self-Attention Explorer</h2>
+            <p class="text-brand-gray text-sm">Click a word to see which other tokens the model "attends" to for context.</p>
+        </div>
+
+        <!-- Interactive Sentence -->
+        <div id="sentence-container" class="flex flex-wrap gap-3 justify-center mb-12 relative z-10">
+            <!-- Tokens will be injected here -->
+        </div>
+
+        <!-- Visualization Area -->
+        <div class="relative h-48 w-full border-t border-brand-silver pt-8">
+            <div id="info-panel" class="text-center opacity-0 transition-opacity duration-500">
+                <p class="text-lg font-medium" id="focused-word-text"></p>
+                <div class="flex justify-center gap-8 mt-4" id="weight-breakdown">
+                    <!-- Dynamic details -->
+                </div>
+            </div>
+            
+            <!-- Default State -->
+            <div id="empty-state" class="absolute inset-0 flex items-center justify-center text-brand-gray italic">
+                Select a token above to visualize attention weights
+            </div>
+        </div>
+
+        <div class="mt-8 flex justify-between items-center text-xs text-brand-gray uppercase tracking-widest border-t pt-4">
+            <span>Visual Context Resolution</span>
+            <span class="flex items-center gap-2">
+                <span class="w-3 h-3 rounded-full bg-brand-blue"></span> High Attention
+                <span class="w-3 h-3 rounded-full bg-brand-silver"></span> Low Attention
+            </span>
+        </div>
+    </div>
+
+    <script>
+        const sentence = ["The", "cat", "chased", "the", "mouse", "because", "it", "was", "hungry"];
+        
+        // Mock attention weights [target_index][source_index]
+        const attentionMatrix = {
+            0: [1.0, 0.1, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], // The -> cat
+            1: [0.1, 1.0, 0.4, 0.0, 0.2, 0.0, 0.0, 0.0, 0.1], // cat -> chased, hungry
+            2: [0.1, 0.6, 1.0, 0.1, 0.5, 0.0, 0.0, 0.0, 0.0], // chased -> cat, mouse
+            4: [0.0, 0.1, 0.4, 0.1, 1.0, 0.0, 0.0, 0.0, 0.1], // mouse -> chased
+            6: [0.0, 0.8, 0.1, 0.0, 0.7, 0.1, 1.0, 0.1, 0.4], // it -> cat (high), mouse (high), hungry
+            8: [0.0, 0.4, 0.1, 0.0, 0.3, 0.0, 0.5, 0.1, 1.0], // hungry -> it, cat
+        };
+
+        const container = document.getElementById('sentence-container');
+        const infoPanel = document.getElementById('info-panel');
+        const emptyState = document.getElementById('empty-state');
+        const focusedText = document.getElementById('focused-word-text');
+        const weightBreakdown = document.getElementById('weight-breakdown');
+
+        function init() {
+            sentence.forEach((word, idx) => {
+                const btn = document.createElement('div');
+                btn.className = 'token px-4 py-2 bg-brand-silver rounded-lg font-medium text-brand-dark';
+                btn.innerText = word;
+                btn.onclick = () => selectToken(idx);
+                container.appendChild(btn);
+            });
+        }
+
+        function selectToken(index) {
+            const tokens = document.querySelectorAll('.token');
+            const weights = attentionMatrix[index] || sentence.map((_, i) => i === index ? 1 : 0.05);
+
+            tokens.forEach((t, i) => {
+                t.classList.remove('active');
+                if (i === index) {
+                    t.classList.add('active');
+                    t.style.backgroundColor = ''; 
+                    t.style.opacity = '1';
+                } else {
+                    const w = weights[i];
+                    // Map weight to opacity/color
+                    t.style.backgroundColor = `rgba(22, 93, 158, ${w})`;
+                    t.style.color = w > 0.4 ? 'white' : 'black';
+                    t.style.opacity = Math.max(0.3, w + 0.2);
+                }
+            });
+
+            // Update Info
+            emptyState.classList.add('hidden');
+            infoPanel.classList.remove('opacity-0');
+            focusedText.innerHTML = `Attention query for: <span class="text-brand-blue">"${sentence[index]}"</span>`;
+            
+            // Show highlights
+            let highlights = [];
+            if (index === 6) { // "it"
+                highlights = ['cat (0.8)', 'mouse (0.7)'];
+            } else if (index === 2) {
+                highlights = ['cat (0.6)', 'mouse (0.5)'];
+            }
+
+            weightBreakdown.innerHTML = highlights.length > 0 
+                ? `<span class="text-sm text-brand-gray">Key associations:</span> ` + highlights.map(h => `<span class="px-2 py-1 bg-blue-50 text-brand-blue rounded border border-blue-100 font-bold">${h}</span>`).join('')
+                : `<span class="text-sm text-brand-gray">Distributed weights across sequence.</span>`;
+        }
+
+        init();
+    </script>
+</body>
+</html>

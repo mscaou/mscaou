@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Act 3 Slide 3.2 - Autocomplete, Scaled Up</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FFFFFF;
+            color: #203A5F;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        h2 {
+            color: #165D9E;
+            font-size: 2.5rem;
+            position: absolute;
+            top: 20px;
+        }
+
+        .phone-container {
+            width: 300px;
+            height: 550px;
+            background: #FAFAFA;
+            border: 12px solid #333;
+            border-radius: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            overflow: hidden;
+        }
+
+        .phone-header {
+            height: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .notch {
+            width: 100px;
+            height: 20px;
+            background: #333;
+            border-bottom-left-radius: 12px;
+            border-bottom-right-radius: 12px;
+        }
+
+        .message-bubble {
+            background: #E3F2FD;
+            padding: 10px 15px;
+            border-radius: 15px;
+            margin-bottom: 10px;
+            align-self: flex-start;
+            max-width: 80%;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        .input-area {
+            margin-top: auto;
+            border-top: 1px solid #E0E0E0;
+            padding-top: 10px;
+        }
+
+        .text-field {
+            width: 100%;
+            border: none;
+            background: transparent;
+            font-size: 1rem;
+            outline: none;
+            color: #333;
+        }
+
+        .suggestions {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .suggestion-chip {
+            background: #E0E0E0;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .suggestion-chip.active {
+            background: #165D9E;
+            color: white;
+            box-shadow: 0 2px 5px rgba(22, 93, 158, 0.3);
+        }
+
+        .scale-arrow {
+            position: absolute;
+            right: 150px;
+            font-size: 4rem;
+            color: #165D9E;
+            opacity: 0;
+            transition: opacity 1s;
+        }
+
+        .big-model-Label {
+            position: absolute;
+            right: 50px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 2rem;
+            font-weight: 700;
+            color: #165D9E;
+            opacity: 0;
+            text-align: center;
+        }
+
+        /* Animation State */
+        .zoomed-out .phone-container {
+            transform: scale(0.6) translateX(-200px);
+            transition: transform 1s ease-in-out;
+        }
+
+        .zoomed-out .scale-arrow {
+            opacity: 1;
+        }
+
+        .zoomed-out .big-model-Label {
+            opacity: 1;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h2>Autocomplete, Scaled Up</h2>
+
+    <div class="phone-container" id="phone">
+        <div class="phone-header">
+            <div class="notch"></div>
+        </div>
+
+        <div class="message-bubble">Hey, where are we meeting?</div>
+
+        <div class="input-area">
+            <span class="text-field" id="typer"></span><span style="animation:blink 1s infinite">|</span>
+            <div class="suggestions" id="suggestions">
+                <div class="suggestion-chip">office</div>
+                <div class="suggestion-chip">park</div>
+                <div class="suggestion-chip">station</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="scale-arrow">→</div>
+    <div class="big-model-Label">
+        Same Mechanism,<br>Just Bigger.
+    </div>
+
+    <script>
+        const typer = document.getElementById('typer');
+        let text = "I will meet you at the ";
+
+        function type(i) {
+            if (i <= text.length) {
+                typer.innerText = text.substring(0, i);
+                setTimeout(() => type(i + 1), 50 + Math.random() * 50);
+            } else {
+                // Focus on suggestion
+                setTimeout(() => {
+                    document.querySelectorAll('.suggestion-chip')[0].classList.add('active');
+                }, 500);
+
+                // Zoom out
+                setTimeout(() => {
+                    document.body.classList.add('zoomed-out');
+                }, 1500);
+            }
+        }
+
+        setTimeout(() => type(0), 1000);
+
+    </script>
+</body>
+
+</html>

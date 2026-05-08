@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Open vs Closed Ecosystem</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --brand-blue: #165D9E;
+            --brand-dark: #203A5F;
+            --brand-silver: #EAEAEA;
+            --brand-gray: #737373;
+        }
+        .ecosystem-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            height: 300px;
+        }
+        .box {
+            border: 2px solid var(--brand-silver);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            position: relative;
+            transition: all 0.4s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .open-active {
+            border-color: var(--brand-blue);
+            background-color: #f0f7ff;
+        }
+        .closed-active {
+            border-color: var(--brand-dark);
+            background-color: #f8fafc;
+        }
+        .model-core {
+            width: 80px;
+            height: 80px;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.5s;
+        }
+        .weight-dots {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 4px;
+        }
+        .dot {
+            width: 8px;
+            height: 8px;
+            background: var(--brand-blue);
+            border-radius: 50%;
+            opacity: 0.8;
+        }
+        .opaque-box {
+            background: var(--brand-dark);
+            width: 60px;
+            height: 60px;
+            border-radius: 8px;
+        }
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px; width: 26px;
+            left: 4px; bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        input:checked + .slider { background-color: var(--brand-blue); }
+        input:checked + .slider:before { transform: translateX(26px); }
+    </style>
+</head>
+<body class="bg-white p-8 flex items-center justify-center min-h-screen">
+
+<div class="w-full max-w-2xl bg-white rounded-2xl shadow-xl border border-silver p-8">
+    <div class="flex justify-between items-center mb-10">
+        <div>
+            <h2 class="text-2xl font-bold" style="color: var(--brand-dark);">Access & Control</h2>
+            <p class="text-sm text-gray-500">How you interact with the model ecosystem.</p>
+        </div>
+        <div class="flex items-center gap-3 bg-silver p-2 rounded-xl">
+            <span class="text-xs font-bold uppercase text-gray-500">Closed</span>
+            <label class="switch">
+                <input type="checkbox" id="mode-toggle" checked onchange="toggleMode()">
+                <span class="slider"></span>
+            </label>
+            <span class="text-xs font-bold uppercase text-gray-500">Open</span>
+        </div>
+    </div>
+
+    <div class="ecosystem-container">
+        <!-- Visualization Area -->
+        <div id="vis-left" class="box">
+            <div id="icon-container" class="model-core">
+                <!-- Dynamic Content -->
+            </div>
+            <h3 id="mode-title" class="font-bold text-lg text-center leading-tight">Open-Weight</h3>
+            <p id="mode-desc" class="text-xs text-center text-gray-500 leading-relaxed mt-2">
+                Weights are public. You can run this on your own hardware, inspect the layers, and fine-tune for specific tasks.
+            </p>
+        </div>
+
+        <!-- Details Area -->
+        <div class="flex flex-col justify-center space-y-4">
+            <div class="p-3 bg-silver rounded-lg">
+                <h4 class="text-[10px] font-bold text-gray-400 uppercase mb-1">Visibility</h4>
+                <p id="visibility-text" class="text-sm font-semibold">Full access to internal math</p>
+            </div>
+            <div class="p-3 bg-silver rounded-lg">
+                <h4 class="text-[10px] font-bold text-gray-400 uppercase mb-1">Usage</h4>
+                <p id="usage-text" class="text-sm font-semibold">Local laptop or private server</p>
+            </div>
+            <div class="p-3 bg-silver rounded-lg">
+                <h4 class="text-[10px] font-bold text-gray-400 uppercase mb-1">Key Value</h4>
+                <p id="value-text" class="text-sm font-semibold">Transparency and Experimentation</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const toggle = document.getElementById('mode-toggle');
+    const box = document.getElementById('vis-left');
+    const icon = document.getElementById('icon-container');
+    const title = document.getElementById('mode-title');
+    const desc = document.getElementById('mode-desc');
+    const visibility = document.getElementById('visibility-text');
+    const usage = document.getElementById('usage-text');
+    const valText = document.getElementById('value-text');
+
+    function toggleMode() {
+        if (toggle.checked) {
+            // Open Mode
+            box.className = "box open-active";
+            icon.innerHTML = `
+                <div class="weight-dots">
+                    <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+                    <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+                    <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+                </div>`;
+            title.innerHTML = "Open-Weight";
+            desc.textContent = "Weights are downloadable. You run the 'inference' on your own machine.";
+            visibility.textContent = "Transparent (Visible Layers)";
+            usage.textContent = "High Control (Private Hardware)";
+            valText.textContent = "Research & Freedom";
+        } else {
+            // Closed Mode
+            box.className = "box closed-active";
+            icon.innerHTML = `<div class="opaque-box shadow-lg flex items-center justify-center text-white text-xs font-bold">API</div>`;
+            title.innerHTML = "Closed Model<br><span class='text-sm text-gray-400'>(proprietary)</span>";
+            desc.textContent = "Accessible via a cloud API. The provider manages the hardware and the safety layers.";
+            visibility.textContent = "Opaque (Black Box)";
+            usage.textContent = "High Convenience (Cloud API)";
+            valText.textContent = "Performance & Scale";
+        }
+    }
+
+    // Initial load
+    toggleMode();
+</script>
+
+</body>
+</html>

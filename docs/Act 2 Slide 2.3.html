@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Act 2 Slide 2.3 - Why Bigger Feels Smarter</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FFFFFF;
+            color: #203A5F;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        h2 {
+            color: #165D9E;
+            font-size: 2.5rem;
+            position: absolute;
+            top: 20px;
+        }
+
+        .comparison {
+            display: flex;
+            width: 90%;
+            height: 70%;
+            gap: 4rem;
+        }
+
+        .panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .label {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: #737373;
+        }
+
+        canvas {
+            background: #FAFAFA;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .caption {
+            margin-top: 1rem;
+            text-align: center;
+            font-size: 1.1rem;
+            color: #737373;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h2>Why Bigger Feels Smarter</h2>
+
+    <div class="comparison">
+        <div class="panel">
+            <div class="label">Small Model</div>
+            <canvas id="smallCanvas" width="400" height="400"></canvas>
+            <div class="caption">Fewer Patterns (Gaps)</div>
+        </div>
+        <div class="panel">
+            <div class="label">Large Model</div>
+            <canvas id="largeCanvas" width="400" height="400"></canvas>
+            <div class="caption">Dense Patterns (Generalization)</div>
+        </div>
+    </div>
+
+    <script>
+        class Network {
+            constructor(canvasId, nodeCount) {
+                this.canvas = document.getElementById(canvasId);
+                this.ctx = this.canvas.getContext('2d');
+                this.nodeCount = nodeCount;
+                this.nodes = [];
+                this.connections = [];
+
+                // Init nodes
+                for (let i = 0; i < this.nodeCount; i++) {
+                    this.nodes.push({
+                        x: Math.random() * this.canvas.width,
+                        y: Math.random() * this.canvas.height,
+                        vx: (Math.random() - 0.5) * 0.5,
+                        vy: (Math.random() - 0.5) * 0.5
+                    });
+                }
+
+                this.animate();
+            }
+
+            draw() {
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+                // Draw Connections
+                this.ctx.strokeStyle = 'rgba(22, 93, 158, 0.15)';
+                this.ctx.beginPath();
+                for (let i = 0; i < this.nodeCount; i++) {
+                    for (let j = i + 1; j < this.nodeCount; j++) {
+                        const dist = Math.hypot(this.nodes[i].x - this.nodes[j].x, this.nodes[i].y - this.nodes[j].y);
+                        if (dist < 100) {
+                            this.ctx.moveTo(this.nodes[i].x, this.nodes[i].y);
+                            this.ctx.lineTo(this.nodes[j].x, this.nodes[j].y);
+                        }
+                    }
+                }
+                this.ctx.stroke();
+
+                // Draw Nodes
+                this.nodes.forEach(node => {
+                    this.ctx.beginPath();
+                    this.ctx.arc(node.x, node.y, 3, 0, Math.PI * 2);
+                    this.ctx.fillStyle = '#165D9E';
+                    this.ctx.fill();
+
+                    // Move
+                    node.x += node.vx;
+                    node.y += node.vy;
+
+                    // Bounce
+                    if (node.x < 0 || node.x > this.canvas.width) node.vx *= -1;
+                    if (node.y < 0 || node.y > this.canvas.height) node.vy *= -1;
+                });
+            }
+
+            animate() {
+                this.draw();
+                requestAnimationFrame(() => this.animate());
+            }
+        }
+
+        new Network('smallCanvas', 20);
+        new Network('largeCanvas', 120);
+
+    </script>
+</body>
+
+</html>

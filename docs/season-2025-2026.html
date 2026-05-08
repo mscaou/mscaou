@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MSC AOU Egypt: 2025-2026 Season Blueprint</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-blue: #165D9E;
+            --dark-blue: #203A5F;
+            --silver: #EAEAEA;
+            --main-white: #FFFFFF;
+
+            /* Mappings */
+            --microsoft-blue: var(--primary-blue);
+            --gray-text: #4a4a4a;
+            --light-gray-bg: var(--silver);
+            --dark-bg: #1a1a1a;
+            --link-hover: #124a7e;
+            --purple-accent: #165D9E;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--silver);
+            color: var(--dark-blue);
+            background-image: radial-gradient(#d1d1d1 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+
+        .section-title {
+            color: var(--dark-blue);
+            border-bottom: 4px solid var(--primary-blue);
+            padding-bottom: 0.5rem;
+            margin-bottom: 2rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            display: inline-block;
+        }
+
+        .card {
+            background-color: var(--main-white);
+            border-radius: 1rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background: var(--primary-blue);
+        }
+
+        /* Org chart specific styles */
+        .org-chart .role {
+            background-color: var(--dark-blue);
+            color: var(--main-white);
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            display: inline-block;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+        }
+
+        .org-chart .role.sub-role {
+            background-color: var(--primary-blue);
+        }
+
+        .org-chart .role.leader-role {
+            background-color: var(--dark-blue);
+            /* Unified color */
+            border: 2px solid var(--primary-blue);
+        }
+
+        .org-chart .role.member-role {
+            background-color: var(--silver);
+            color: var(--dark-blue);
+            border: 1px solid var(--dark-blue);
+            font-weight: 500;
+        }
+
+        .org-chart .connector {
+            width: 2px;
+            background-color: var(--dark-blue);
+            margin: 0 auto;
+        }
+
+        /* Timeline styles */
+        .timeline-item .card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .timeline-item .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -2px rgb(0 0 0 / 0.1);
+        }
+
+        .timeline-dot {
+            width: 1.5rem;
+            height: 1.5rem;
+            background-color: var(--main-white);
+            border: 4px solid var(--primary-blue);
+            border-radius: 9999px;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+        }
+    </style>
+</head>
+
+<body class="antialiased overflow-x-hidden">
+
+    <header class="py-12 bg-white shadow-sm border-b-4 border-[var(--primary-blue)]">
+        <div class="container mx-auto max-w-7xl text-center px-4">
+            <div class="flex flex-col md:flex-row items-center justify-center gap-6 mb-6">
+                <img src="logo.jpg" alt="MSC Logo" class="w-24 h-24 md:w-32 md:h-32 object-contain drop-shadow-md"
+                    onerror="this.style.display='none'">
+                <div class="text-center md:text-left">
+                    <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight text-[var(--dark-blue)] mb-2">MSC AOU
+                        Egypt</h1>
+                    <p class="text-xl md:text-2xl font-medium text-[var(--primary-blue)] uppercase tracking-wide">Season
+                        Blueprint (2025-2026)</p>
+                </div>
+            </div>
+
+            <div class="mt-8">
+                <a href="index.html"
+                    class="inline-block bg-[var(--dark-blue)] text-white font-bold px-8 py-3 rounded-full hover:bg-[var(--primary-blue)] transition-all duration-300 shadow-lg transform hover:-translate-y-1">
+                    &larr; Back to Main Charter
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto max-w-7xl p-4 md:p-12 space-y-20">
+
+        <section id="goals">
+            <h2 class="text-4xl font-bold text-center section-title w-fit mx-auto">🎯 Season Goals</h2>
+            <p class="text-center text-gray-600 max-w-3xl mx-auto mt-[-1rem] mb-12 text-xl">
+                Let’s focus on <strong>4 main pillars</strong>, each with measurable outcomes:
+            </p>
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- Goal 1 -->
+                <div class="card p-8 bg-white border-l-8 border-[var(--primary-blue)]">
+                    <h3 class="text-2xl font-bold mb-2 text-[var(--dark-blue)]">1. Rebuild the Team</h3>
+                    <p class="text-gray-600 mb-4">Form all committees, define workflows, and strengthen leadership
+                        communication.</p>
+                    <div class="bg-[var(--silver)] p-4 rounded-lg">
+                        <p class="font-bold text-[var(--dark-blue)]">Key Metrics:</p>
+                        <ul class="list-disc list-inside text-gray-700">
+                            <li>✅ All committees operational by <strong>early November</strong></li>
+                            <li>✅ Weekly leadership syncs established</li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- Goal 2 -->
+                <div class="card p-8 bg-white border-l-8 border-[var(--dark-blue)]">
+                    <h3 class="text-2xl font-bold mb-2 text-[var(--dark-blue)]">2. Grow & Engage Community</h3>
+                    <p class="text-gray-600 mb-4">Expand club visibility, attract new students, and foster community
+                        engagement.</p>
+                    <div class="bg-[var(--silver)] p-4 rounded-lg">
+                        <p class="font-bold text-[var(--dark-blue)]">Key Metrics:</p>
+                        <ul class="list-disc list-inside text-gray-700">
+                            <li>🚀 <strong>25,000+ WhatsApp members</strong></li>
+                            <li>🎉 <strong>3+ interactive on-campus events</strong></li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- Goal 3 -->
+                <div class="card p-8 bg-white border-l-8 border-[var(--primary-blue)]">
+                    <h3 class="text-2xl font-bold mb-2 text-[var(--dark-blue)]">3. Develop Talent</h3>
+                    <p class="text-gray-600 mb-4">Build strong technical and professional skills through workshops,
+                        mentorship, and practice events.</p>
+                    <div class="bg-[var(--silver)] p-4 rounded-lg">
+                        <p class="font-bold text-[var(--dark-blue)]">Key Metrics:</p>
+                        <ul class="list-disc list-inside text-gray-700">
+                            <li>💻 <strong>8+ workshops</strong> across AI, Web, Cyber, and Blockchain</li>
+                            <li>🧠 <strong>Mentorship Program</strong> launched mid-year</li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- Goal 4 -->
+                <div class="card p-8 bg-white border-l-8 border-[var(--dark-blue)]">
+                    <h3 class="text-2xl font-bold mb-2 text-[var(--dark-blue)]">4. Showcase & Collaborate</h3>
+                    <p class="text-gray-600 mb-4">Strengthen partnerships, celebrate achievements, and create national
+                        collaborations.</p>
+                    <div class="bg-[var(--silver)] p-4 rounded-lg">
+                        <p class="font-bold text-[var(--dark-blue)]">Key Metrics:</p>
+                        <ul class="list-disc list-inside text-gray-700">
+                            <li>🤝 Collaborations with <strong>NU MSC & national chapters</strong></li>
+                            <li>🌟 “<strong>Beyond the Code</strong>” year-end showcase</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="timeline">
+            <h2 class="text-4xl font-bold text-center section-title w-fit mx-auto">📆 Season Timeline</h2>
+            <div class="relative mt-12 px-4">
+                <div
+                    class="absolute h-full border-l-4 border-[var(--primary-blue)] left-4 md:left-1/2 transform md:-translate-x-1/2">
+                </div>
+
+                <div class="space-y-16">
+
+                    <!-- Nov -->
+                    <div class="flex flex-col md:flex-row items-start w-full relative">
+                        <div
+                            class="absolute left-[-5px] md:left-1/2 md:-ml-3 top-0 w-6 h-6 bg-[var(--primary-blue)] rounded-full border-4 border-white z-10">
+                        </div>
+                        <div class="w-full md:w-1/2 md:pr-12 pl-12 md:pl-0 md:text-right mb-4 md:mb-0">
+                            <p class="text-3xl font-black text-[var(--primary-blue)]">Nov 2025</p>
+                            <p class="text-sm text-gray-500 mt-1 uppercase tracking-widest">Foundation Month</p>
+                        </div>
+                        <div class="w-full md:w-1/2 md:pl-12 pl-12">
+                            <div class="card p-6 bg-white">
+                                <ul class="space-y-2 text-gray-700">
+                                    <li class="flex items-start"><span class="text-[var(--primary-blue)] mr-2">•</span>
+                                        <strong>Team Formation & Onboarding</strong> (HR)
+                                    </li>
+                                    <li class="flex items-start"><span class="text-[var(--primary-blue)] mr-2">•</span>
+                                        <strong>“Welcome to MSC” Campaign</strong> (Media & Marketing + PR)
+                                    </li>
+                                    <li class="flex items-start"><span class="text-[var(--primary-blue)] mr-2">•</span>
+                                        <strong>WhatsApp Public Community Launch</strong> (HR + PR)
+                                    </li>
+                                    <li class="flex items-start"><span class="text-[var(--primary-blue)] mr-2">•</span>
+                                        <strong>Draft Tech Roadmap</strong> (Tech Team)
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Dec -->
+                    <div class="flex flex-col md:flex-row items-start w-full relative">
+                        <div
+                            class="absolute left-[-5px] md:left-1/2 md:-ml-3 top-0 w-6 h-6 bg-[var(--dark-blue)] rounded-full border-4 border-white z-10">
+                        </div>
+                        <div
+                            class="w-full md:w-1/2 md:pr-12 pl-12 md:pl-0 md:text-right mb-4 md:mb-0 order-1 md:order-1">
+                            <div class="card p-6 bg-white md:text-right">
+                                <ul class="space-y-2 text-gray-700">
+                                    <li class="bg-blue-50 p-3 rounded border-l-4 border-[var(--primary-blue)]">🤖
+                                        <strong>Intro to AI (LLMs) Workshop</strong><br><span
+                                            class="text-sm text-gray-500">Dec 14</span>
+                                </ul>
+                                <br>
+                                <ul class="space-y-2 text-gray-700">
+                                    <li class="bg-blue-50 p-3 rounded border-l-4 border-[var(--primary-blue)]">
+                                        <strong>Teaching Tech Team interactive content strategies</strong><br><span
+                                            class="text-sm text-gray-500">Dec 30</span>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="w-full md:w-1/2 md:pl-12 pl-12 order-2 md:order-2">
+                            <p class="text-3xl font-black text-[var(--dark-blue)]">Dec 2025</p>
+                            <p class="text-sm text-gray-500 mt-1 uppercase tracking-widest">Kick-off Activities</p>
+                        </div>
+                    </div>
+
+                    <!-- Jan -->
+                    <div class="flex flex-col md:flex-row items-start w-full relative">
+                        <div
+                            class="absolute left-[-5px] md:left-1/2 md:-ml-3 top-0 w-6 h-6 bg-gray-400 rounded-full border-4 border-white z-10">
+                        </div>
+                        <div class="w-full md:w-1/2 md:pr-12 pl-12 md:pl-0 md:text-right mb-4 md:mb-0">
+                            <p class="text-3xl font-black text-gray-400">Jan 2026</p>
+                        </div>
+                        <div class="w-full md:w-1/2 md:pl-12 pl-12">
+                            <div class="card p-6 bg-gray-50 border-dashed border-2 border-gray-300">
+                                <p class="text-gray-500 italic">Academic focus break (Finals)</p>
+                                <p class="text-gray-500">Launch YouTube Channel with recorded LLM & Mobile Workshops.</p>
+                                <p class="text-gray-500">Silent planning phase for Mid-year Trip & Mentorship syllabus.</p>
+                                <p class="text-gray-500">1-on-1 Strategy Meetings with each Tech Lead.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Feb -->
+                    <div class="flex flex-col md:flex-row items-start w-full relative">
+                        <div
+                            class="absolute left-[-5px] md:left-1/2 md:-ml-3 top-0 w-6 h-6 bg-[var(--primary-blue)] rounded-full border-4 border-white z-10">
+                        </div>
+                        <div
+                            class="w-full md:w-1/2 md:pr-12 pl-12 md:pl-0 md:text-right mb-4 md:mb-0 order-1 md:order-1">
+                            <div class="card p-6 bg-white md:text-right">
+                                <ul class="space-y-2 text-gray-700">
+                                    <li><strong>Announce Mentorship programs</strong></li>
+                                    <li><strong>Core Team Trip / Chapter Meet-Up</strong></li>
+                                    <li><strong>Collaboration Event with NU MSC</strong></li>
+                                    <li><strong>Ramadan Podcast Series 🎙️</strong></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="w-full md:w-1/2 md:pl-12 pl-12 order-2 md:order-2">
+                            <p class="text-3xl font-black text-[var(--primary-blue)]">Feb 2026</p>
+                        </div>
+                    </div>
+
+                    <!-- Mar -->
+                    <div class="flex flex-col md:flex-row items-start w-full relative">
+                        <div
+                            class="absolute left-[-5px] md:left-1/2 md:-ml-3 top-0 w-6 h-6 bg-[var(--dark-blue)] rounded-full border-4 border-white z-10">
+                        </div>
+                        <div class="w-full md:w-1/2 md:pr-12 pl-12 md:pl-0 md:text-right mb-4 md:mb-0">
+                            <p class="text-3xl font-black text-[var(--dark-blue)]">Mar 2026</p>
+                        </div>
+                        <div class="w-full md:w-1/2 md:pl-12 pl-12">
+                            <div class="card p-6 bg-white">
+                                <ul class="space-y-2 text-gray-700">
+                                    <li><strong>Core Team Iftar 🌙</strong></li>
+                                    <li><strong>Mentorship Program Launch</strong></li>
+                                    <li><strong>Eid Al Fitr Break</strong></li>
+                                    <li class="font-bold text-[var(--primary-blue)]">4 Technical Workshops (AI, Web,
+                                        Cyber, Blockchain)</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Apr -->
+                    <div class="flex flex-col md:flex-row items-start w-full relative">
+                        <div
+                            class="absolute left-[-5px] md:left-1/2 md:-ml-3 top-0 w-6 h-6 bg-[var(--primary-blue)] rounded-full border-4 border-white z-10">
+                        </div>
+                        <div
+                            class="w-full md:w-1/2 md:pr-12 pl-12 md:pl-0 md:text-right mb-4 md:mb-0 order-1 md:order-1">
+                            <div class="card p-6 bg-white md:text-right">
+                                <ul class="space-y-2 text-gray-700">
+                                    <li><strong>Coding Dojo / Katas (2 sessions)</strong></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="w-full md:w-1/2 md:pl-12 pl-12 order-2 md:order-2">
+                            <p class="text-3xl font-black text-[var(--primary-blue)]">Apr 2026</p>
+                        </div>
+                    </div>
+
+                    <!-- May -->
+                    <div class="flex flex-col md:flex-row items-start w-full relative">
+                        <div
+                            class="absolute left-[-5px] md:left-1/2 md:-ml-3 top-0 w-6 h-6 bg-[var(--dark-blue)] rounded-full border-4 border-white z-10">
+                        </div>
+                        <div class="w-full md:w-1/2 md:pr-12 pl-12 md:pl-0 md:text-right mb-4 md:mb-0">
+                            <p class="text-3xl font-black text-[var(--dark-blue)]">May 2026</p>
+                        </div>
+                        <div class="w-full md:w-1/2 md:pl-12 pl-12">
+                            <div class="card p-6 bg-white">
+                                <ul class="space-y-2 text-gray-700">
+                                    <li><strong>Second Event</strong></li>
+                                    <li><strong>Core Team Trip / Chapter Meet-Up</strong></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Jun -->
+                    <div class="flex flex-col md:flex-row items-start w-full relative">
+                        <div
+                            class="absolute left-[-5px] md:left-1/2 md:-ml-3 top-0 w-6 h-6 bg-gray-400 rounded-full border-4 border-white z-10">
+                        </div>
+                        <div
+                            class="w-full md:w-1/2 md:pr-12 pl-12 md:pl-0 md:text-right mb-4 md:mb-0 order-1 md:order-1">
+                            <div class="card p-6 bg-gray-50 border-dashed border-2 border-gray-300 md:text-right">
+                                <p class="text-gray-500 italic">Academic break (Finals)</p>
+                            </div>
+                        </div>
+                        <div class="w-full md:w-1/2 md:pl-12 pl-12 order-2 md:order-2">
+                            <p class="text-3xl font-black text-gray-400">Jun 2026</p>
+                        </div>
+                    </div>
+
+                    <!-- Jul -->
+                    <div class="flex flex-col md:flex-row items-start w-full relative">
+                        <div
+                            class="absolute left-[-5px] md:left-1/2 md:-ml-3 top-0 w-6 h-6 bg-[var(--primary-blue)] rounded-full border-4 border-white z-10">
+                        </div>
+                        <div class="w-full md:w-1/2 md:pr-12 pl-12 md:pl-0 md:text-right mb-4 md:mb-0">
+                            <p class="text-3xl font-black text-[var(--primary-blue)]">Jul 2026</p>
+                        </div>
+                        <div class="w-full md:w-1/2 md:pl-12 pl-12">
+                            <div class="card p-6 bg-white">
+                                <ul class="space-y-2 text-gray-700">
+                                    <li><strong>AOU Summer Bootcamp (NU MSC)</strong></li>
+                                    <li><strong>Professional Development Day</strong></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Aug -->
+                    <div class="flex flex-col md:flex-row items-start w-full relative">
+                        <div
+                            class="absolute left-[-5px] md:left-1/2 md:-ml-3 top-0 w-6 h-6 bg-[var(--dark-blue)] rounded-full border-4 border-white z-10">
+                        </div>
+                        <div
+                            class="w-full md:w-1/2 md:pr-12 pl-12 md:pl-0 md:text-right mb-4 md:mb-0 order-1 md:order-1">
+                            <div class="card p-6 bg-white md:text-right">
+                                <ul class="space-y-2 text-gray-700">
+                                    <li class="font-bold text-[var(--primary-blue)]">“Beyond the Code” Year-End Event 🎉
+                                    </li>
+                                    <li><strong>Publish “Season Highlights Report”</strong></li>
+                                    <li><strong>Leadership Transition</strong></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="w-full md:w-1/2 md:pl-12 pl-12 order-2 md:order-2">
+                            <p class="text-3xl font-black text-[var(--dark-blue)]">Aug 2026</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <section id="structure-count">
+            <div class="grid lg:grid-cols-3 gap-8">
+                <div class="lg:col-span-2 min-w-0">
+                    <h2 class="text-4xl font-bold text-center section-title w-fit mx-auto">Team Structure</h2>
+                    <div
+                        class="card p-8 text-center org-chart bg-white overflow-x-auto max-w-[85vw] md:max-w-full mx-auto">
+                        <div class="min-w-[600px]"> <!-- Ensure min width for chart -->
+                            <div class="role text-xl px-8 py-3">President</div>
+                            <div class="connector h-8"></div>
+                            <div class="role text-lg px-6 py-2">Vice President</div>
+                            <div class="connector h-8"></div>
+                            <div class="w-3/4 mx-auto h-1 bg-[var(--dark-blue)] rounded-full mb-4"></div>
+
+                            <div class="grid grid-cols-4 gap-4">
+                                <div class="flex flex-col items-center">
+                                    <div class="connector h-4"></div>
+                                    <div class="role sub-role">PR</div>
+                                    <div class="connector h-2"></div>
+                                    <div class="role member-role text-sm">Members</div>
+                                </div>
+                                <div class="flex flex-col items-center">
+                                    <div class="connector h-4"></div>
+                                    <div class="role sub-role">HR</div>
+                                    <div class="connector h-2"></div>
+                                    <div class="role member-role text-sm">Members</div>
+                                </div>
+                                <div class="flex flex-col items-center">
+                                    <div class="connector h-4"></div>
+                                    <div class="role sub-role">Media</div>
+                                    <div class="connector h-2"></div>
+                                    <div class="role member-role text-sm">Members</div>
+                                </div>
+                                <div class="flex flex-col items-center">
+                                    <div class="connector h-4"></div>
+                                    <div class="role sub-role">Tech</div>
+                                    <div class="connector h-2"></div>
+                                    <div class="w-full h-1 bg-[var(--primary-blue)] rounded-full my-2"></div>
+                                    <div class="space-y-2 w-full">
+                                        <div class="role leader-role text-xs w-full py-1">AI & Data</div>
+                                        <div class="role leader-role text-xs w-full py-1">Web & App</div>
+                                        <div class="role leader-role text-xs w-full py-1">Cyber & Cloud</div>
+                                        <div class="role leader-role text-xs w-full py-1">Blockchain</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <h2 class="text-4xl font-bold text-center section-title w-fit mx-auto">Activities Count</h2>
+                    <div class="card p-6 bg-white">
+                        <div class="space-y-4">
+                            <div class="flex justify-between items-center border-b pb-2">
+                                <span class="font-semibold">Events</span>
+                                <span class="font-black text-2xl text-[var(--primary-blue)]">4</span>
+                            </div>
+                            <div class="flex justify-between items-center border-b pb-2">
+                                <span class="font-semibold">Workshops</span>
+                                <span class="font-black text-2xl text-[var(--primary-blue)]">7</span>
+                            </div>
+                            <div class="flex justify-between items-center border-b pb-2">
+                                <span class="font-semibold">Coding Dojos</span>
+                                <span class="font-black text-2xl text-[var(--primary-blue)]">2</span>
+                            </div>
+                            <div class="flex justify-between items-center border-b pb-2">
+                                <span class="font-semibold">Trips / Meet-Ups</span>
+                                <span class="font-black text-2xl text-[var(--primary-blue)]">2</span>
+                            </div>
+                            <div class="flex justify-between items-center border-b pb-2">
+                                <span class="font-semibold">Mentorships</span>
+                                <span class="font-black text-2xl text-[var(--primary-blue)]">1</span>
+                            </div>
+                            <div class="flex justify-between items-center border-b pb-2">
+                                <span class="font-semibold">Online Sessions</span>
+                                <span class="font-black text-2xl text-[var(--primary-blue)]">6</span>
+                            </div>
+                            <div
+                                class="bg-[var(--dark-blue)] text-white p-4 rounded-lg flex justify-between items-center mt-6">
+                                <span class="font-bold text-lg">TOTAL</span>
+                                <span class="font-black text-3xl">24</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="responsibilities">
+            <h2 class="text-4xl font-bold text-center section-title w-fit mx-auto">🧩 Teams Focus</h2>
+            <div class="grid md:grid-cols-2 gap-8 mt-8">
+                <div class="card p-8 bg-white">
+                    <h3 class="text-xl font-bold mb-3 text-[var(--dark-blue)]">🏛️ Leadership</h3>
+                    <ul class="list-disc list-inside space-y-2 text-gray-600">
+                        <li>Set vision & strategy.</li>
+                        <li>Sync all teams weekly.</li>
+                        <li>Manage partnerships.</li>
+                        <li>Unblock teams.</li>
+                    </ul>
+                </div>
+                <div class="card p-8 bg-white">
+                    <h3 class="text-xl font-bold mb-3 text-[var(--dark-blue)]">🎨 Media & Marketing</h3>
+                    <ul class="list-disc list-inside space-y-2 text-gray-600">
+                        <li>2 fixed reels per week.</li>
+                        <li>Brand and promote events.</li>
+                        <li>Document every activity.</li>
+                        <li>Grow community reach.</li>
+                    </ul>
+                </div>
+                <div class="card p-8 bg-white">
+                    <h3 class="text-xl font-bold mb-3 text-[var(--dark-blue)]">💼 PR & Operations</h3>
+                    <ul class="list-disc list-inside space-y-2 text-gray-600">
+                        <li>Organize logistics.</li>
+                        <li>Build partnerships.</li>
+                        <li>Create memorable experiences.</li>
+                        <li>Coordinate fundraising.</li>
+                    </ul>
+                </div>
+                <div class="card p-8 bg-white">
+                    <h3 class="text-xl font-bold mb-3 text-[var(--dark-blue)]">🧍‍♀️ HR & Engagement</h3>
+                    <ul class="list-disc list-inside space-y-2 text-gray-600">
+                        <li>Recruitment & onboarding.</li>
+                        <li>Performance evaluations.</li>
+                        <li>Team culture & conflict resolution.</li>
+                        <li>Weekly reports.</li>
+                    </ul>
+                </div>
+                <div class="card p-8 bg-white md:col-span-2">
+                    <h3 class="text-xl font-bold mb-3 text-[var(--dark-blue)]">💻 Tech Team</h3>
+                    <ul class="list-disc list-inside space-y-2 text-gray-600">
+                        <li>Deliver workshops & bootcamps.</li>
+                        <li>Run Coding Dojos.</li>
+                        <li>IT support for events.</li>
+                        <li>Build club systems.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="notion">
+            <h2 class="text-4xl font-bold text-center section-title w-fit mx-auto">Projects & Tasks</h2>
+            <div class="card p-8 text-center bg-white">
+                <p class="text-gray-500 mb-6 text-lg">View my project roadmap and task management system</p>
+                <a href="#" target="_blank"
+                    class="inline-block bg-[var(--primary-blue)] hover:bg-[var(--dark-blue)] text-white font-bold py-4 px-8 rounded-full transition-all shadow-lg transform hover:-translate-y-1">
+                    Open Notion Workspace →
+                </a>
+            </div>
+        </section>
+
+    </main>
+
+</body>
+
+</html>

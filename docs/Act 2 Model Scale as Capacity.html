@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Model Scale Comparison</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --brand-blue: #165D9E;
+            --brand-dark: #203A5F;
+            --brand-silver: #EAEAEA;
+            --brand-gray: #737373;
+        }
+        body {
+            background-color: white;
+            color: black;
+            font-family: ui-sans-serif, system-ui, sans-serif;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .notebook {
+            transition: all 0.7s cubic-bezier(0.19, 1, 0.22, 1);
+            border: 2px solid var(--brand-silver);
+            background: white;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            box-sizing: border-box;
+        }
+        .pattern {
+            position: absolute;
+            background: var(--brand-blue);
+            border-radius: 1px;
+            opacity: 0;
+        }
+        input[type=range] {
+            accent-color: var(--brand-blue);
+        }
+        .benchmark-btn {
+            background: var(--brand-silver);
+            color: var(--brand-gray);
+            font-size: 0.7rem;
+            font-weight: bold;
+            padding: 6px 12px;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+        .benchmark-btn.active {
+            background: var(--brand-blue);
+            color: white;
+            box-shadow: 0 4px 12px rgba(22, 93, 158, 0.2);
+        }
+        .comparison-insight-card {
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+        }
+        .huge-ratio {
+            background: linear-gradient(to right, var(--brand-blue), var(--brand-dark));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    </style>
+</head>
+<body>
+
+<div class="w-full max-w-5xl p-6 bg-white rounded-2xl shadow-2xl border border-silver">
+    <div class="text-center mb-8">
+        <h2 class="text-3xl font-black mb-1" style="color: var(--brand-dark);">Visualizing the Scale Gap</h2>
+        <p class="text-sm font-medium" style="color: var(--brand-gray);">How 3 Billion vs 10 Trillion Parameters actually compare.</p>
+    </div>
+
+    <!-- Comparison Area -->
+    <div class="grid grid-cols-2 gap-4 mb-8 items-center justify-items-center h-[400px] border-b border-silver pb-12">
+        <!-- Model A (Small) -->
+        <div class="flex flex-col items-center justify-center h-full w-full">
+            <div id="notebook-a" class="notebook rounded-lg shadow-sm overflow-hidden mb-6">
+                <div id="grid-a" class="w-full h-full relative"></div>
+                <span id="label-a" class="absolute font-bold text-[10px] opacity-30 z-10 pointer-events-none">3B</span>
+            </div>
+            <div class="text-center">
+                <p class="text-[11px] font-black uppercase text-gray-400 tracking-widest mb-1">Local / Edge</p>
+                <p id="size-a" class="text-2xl font-black text-blue-900">3B</p>
+                <p class="text-[10px] text-gray-500">Fast & Private</p>
+            </div>
+        </div>
+
+        <!-- Model B (Frontier) -->
+        <div class="flex flex-col items-center justify-center h-full w-full border-l border-silver">
+            <div id="notebook-b" class="notebook rounded-xl shadow-2xl overflow-hidden mb-6">
+                <div id="grid-b" class="w-full h-full relative"></div>
+                <span id="label-b" class="absolute font-bold text-lg opacity-20 z-10 pointer-events-none">10T</span>
+            </div>
+            <div class="text-center">
+                <p class="text-[11px] font-black uppercase text-gray-400 tracking-widest mb-1">Frontier Scale</p>
+                <p id="size-b" class="text-2xl font-black text-blue-900">10T</p>
+                <p class="text-[10px] text-gray-500">Massive Coverage</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Controls Container -->
+    <div class="grid grid-cols-2 gap-12 bg-gray-50 p-6 rounded-xl">
+        <!-- Controls A -->
+        <div class="space-y-4">
+            <div class="flex justify-between items-center">
+                <span class="text-[10px] font-bold text-gray-500 uppercase">Model A Size</span>
+                <div class="flex gap-1">
+                    <button onclick="setVal('a', 3)" id="btn-a-3" class="benchmark-btn active">3B</button>
+                    <button onclick="setVal('a', 70)" id="btn-a-70" class="benchmark-btn">70B</button>
+                </div>
+            </div>
+            <input type="range" id="slider-a" min="1" max="10000" value="3" class="w-full h-1.5 bg-silver rounded-lg appearance-none cursor-pointer">
+        </div>
+
+        <!-- Controls B -->
+        <div class="space-y-4">
+            <div class="flex justify-between items-center">
+                <span class="text-[10px] font-bold text-gray-500 uppercase">Model B Size</span>
+                <div class="flex gap-1">
+                    <button onclick="setVal('b', 1000)" id="btn-b-1t" class="benchmark-btn">1T</button>
+                    <button onclick="setVal('b', 10000)" id="btn-b-10t" class="benchmark-btn active">10T</button>
+                </div>
+            </div>
+            <input type="range" id="slider-b" min="1" max="10000" value="10000" class="w-full h-1.5 bg-silver rounded-lg appearance-none cursor-pointer">
+        </div>
+    </div>
+
+    <!-- Massive Disparity Info Panel -->
+    <div class="mt-8 p-6 comparison-insight-card rounded-2xl border border-silver flex flex-col md:flex-row gap-8 items-center">
+        <div class="text-center md:text-left min-w-[180px]">
+            <p class="text-[10px] uppercase font-black text-gray-400 mb-1">Capacity Ratio</p>
+            <p id="ratio-stat" class="text-4xl font-black huge-ratio tracking-tighter">1 : 3,333</p>
+        </div>
+        <div class="h-12 w-px bg-gray-300 hidden md:block"></div>
+        <div class="flex-1">
+            <p id="comparison-insight" class="text-sm font-medium text-slate-700 leading-relaxed">
+                If the 3B model was a 10-page pamphlet, the 10T model would be a massive library containing 33,330 pages. 
+                This isn't just "more" text; it's the ability to store rare patterns that small models physically cannot fit.
+            </p>
+        </div>
+    </div>
+</div>
+
+<script>
+    const sliders = { a: document.getElementById('slider-a'), b: document.getElementById('slider-b') };
+    const notebooks = { a: document.getElementById('notebook-a'), b: document.getElementById('notebook-b') };
+    const grids = { a: document.getElementById('grid-a'), b: document.getElementById('grid-b') };
+    const labels = { a: document.getElementById('label-a'), b: document.getElementById('label-b') };
+    const sizeTexts = { a: document.getElementById('size-a'), b: document.getElementById('size-b') };
+    const ratioStat = document.getElementById('ratio-stat');
+    const insight = document.getElementById('comparison-insight');
+
+    function formatLabel(val) {
+        if (val < 1000) return val + "B";
+        return (val / 1000).toFixed(val % 1000 === 0 ? 0 : 1) + "T";
+    }
+
+    function setVal(id, val) {
+        sliders[id].value = val;
+        update();
+    }
+
+    function update() {
+        const valA = parseInt(sliders.a.value);
+        const valB = parseInt(sliders.b.value);
+
+        // Visual Layout Logic
+        // We want the 10T (10,000B) to take up most of its half-screen (approx 350px-400px wide).
+        // A 3B model should look tiny in comparison but still be visible.
+        // Using a modified logarithmic scale for visual comfort while maintaining the "feeling" of size.
+        
+        [ ['a', valA], ['b', valB] ].forEach(([id, val]) => {
+            // Log-based visual scaling to prevent 1B being invisible or 10T being off-screen
+            const minSize = 25;
+            const maxSize = 340;
+            // Normalize val from 1-10000 range to 0-1 range
+            const normalized = Math.log10(val) / Math.log10(10000);
+            const dim = minSize + (normalized * (maxSize - minSize));
+            
+            notebooks[id].style.width = `${dim}px`;
+            notebooks[id].style.height = `${dim * 1.25}px`;
+            
+            // Pattern generation (Density reflects scale)
+            grids[id].innerHTML = '';
+            const patternDensity = Math.min(Math.floor(val * 0.8) + 20, 400); 
+            for(let i=0; i < patternDensity; i++) {
+                const p = document.createElement('div');
+                p.className = 'pattern';
+                p.style.width = `${Math.random() * (dim/10) + 2}px`;
+                p.style.height = `${Math.max(1, Math.floor(dim/150))}px`;
+                p.style.top = `${Math.random() * 92}%`;
+                p.style.left = `${Math.random() * 88}%`;
+                p.style.opacity = Math.random() * 0.4 + 0.1;
+                grids[id].appendChild(p);
+            }
+
+            labels[id].textContent = formatLabel(val);
+            sizeTexts[id].textContent = formatLabel(val);
+            
+            // Thickness/Depth visual
+            const thick = 1 + (normalized * 25);
+            notebooks[id].style.boxShadow = `${thick}px ${thick}px 0px #EAEAEA, ${thick*1.5}px ${thick*1.5}px 0px #D1D1D1`;
+        });
+
+        // Ratio calculation
+        const ratio = (Math.max(valA, valB) / Math.min(valA, valB));
+        const formattedRatio = ratio.toLocaleString(undefined, { maximumFractionDigits: 0 });
+        
+        ratioStat.textContent = valA === valB ? "1 : 1" : `1 : ${formattedRatio}`;
+        
+        const bigger = valA > valB ? 'Model A' : 'Model B';
+        const smaller = valA > valB ? 'Model B' : 'Model A';
+        
+        if (valA === valB) {
+            insight.innerHTML = "Both models have identical pattern capacity. They have the same 'volume' of storage for knowledge.";
+        } else {
+            const pages = Math.floor(ratio * 10);
+            insight.innerHTML = `If the <strong>${formatLabel(Math.min(valA, valB))}</strong> model were a 10-page pamphlet, the <strong>${formatLabel(Math.max(valA, valB))}</strong> model would be a massive library book with <strong>${pages.toLocaleString()} pages</strong>. This extra capacity allows it to cross-reference billions of patterns that smaller models physically cannot store.`;
+        }
+
+        // Active button states
+        document.getElementById('btn-a-3').className = `benchmark-btn ${valA===3?'active':''}`;
+        document.getElementById('btn-a-70').className = `benchmark-btn ${valA===70?'active':''}`;
+        document.getElementById('btn-b-1t').className = `benchmark-btn ${valB===1000?'active':''}`;
+        document.getElementById('btn-b-10t').className = `benchmark-btn ${valB===10000?'active':''}`;
+    }
+
+    sliders.a.oninput = update;
+    sliders.b.oninput = update;
+    window.onload = update;
+</script>
+
+</body>
+</html>

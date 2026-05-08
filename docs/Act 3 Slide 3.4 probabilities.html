@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --brand-blue: #165D9E;
+            --brand-dark: #203A5F;
+            --brand-silver: #EAEAEA;
+        }
+        .bar-container { transition: width 1s ease-out; }
+        .selected-row { background-color: rgba(22, 93, 158, 0.1); border-left: 4px solid var(--brand-blue); }
+    </style>
+</head>
+<body class="bg-white p-6 font-sans">
+    <div class="max-w-3xl mx-auto border rounded-2xl p-8 shadow-sm">
+        <div class="mb-6">
+            <span class="text-sm font-bold text-[#737373] uppercase tracking-widest">Context</span>
+            <div class="text-2xl mt-2 font-medium">
+                "I will meet you at the..."
+            </div>
+        </div>
+
+        <div class="space-y-4">
+            <div class="text-sm font-bold text-[#165D9E] uppercase">Candidate Next Tokens</div>
+            
+            <!-- Candidate 1 -->
+            <div class="flex items-center space-x-4 p-2 rounded transition-all cursor-pointer hover:bg-gray-50" onclick="select(0)">
+                <div class="w-20 font-mono font-bold text-lg">airport</div>
+                <div class="flex-grow bg-gray-100 rounded-full h-8 overflow-hidden">
+                    <div class="bg-[#165D9E] h-full bar-container" style="width: 45%"></div>
+                </div>
+                <div class="w-12 text-right font-bold">45%</div>
+            </div>
+
+            <!-- Candidate 2 -->
+            <div class="flex items-center space-x-4 p-2 rounded transition-all cursor-pointer hover:bg-gray-50" onclick="select(1)">
+                <div class="w-20 font-mono font-bold text-lg">office</div>
+                <div class="flex-grow bg-gray-100 rounded-full h-8 overflow-hidden">
+                    <div class="bg-[#165D9E] h-full bar-container" style="width: 32%"></div>
+                </div>
+                <div class="w-12 text-right font-bold">32%</div>
+            </div>
+
+            <!-- Candidate 3 -->
+            <div class="flex items-center space-x-4 p-2 rounded transition-all cursor-pointer hover:bg-gray-50" onclick="select(2)">
+                <div class="w-20 font-mono font-bold text-lg">station</div>
+                <div class="flex-grow bg-gray-100 rounded-full h-8 overflow-hidden">
+                    <div class="bg-[#165D9E] h-full bar-container" style="width: 18%"></div>
+                </div>
+                <div class="w-12 text-right font-bold">18%</div>
+            </div>
+
+            <!-- Candidate 4 -->
+            <div class="flex items-center space-x-4 p-2 rounded transition-all cursor-pointer hover:bg-gray-50" onclick="select(3)">
+                <div class="w-20 font-mono font-bold text-lg text-gray-400">moon</div>
+                <div class="flex-grow bg-gray-100 rounded-full h-8 overflow-hidden">
+                    <div class="bg-[#737373] h-full bar-container" style="width: 0.1%"></div>
+                </div>
+                <div class="w-12 text-right font-bold text-gray-400">0.1%</div>
+            </div>
+        </div>
+
+        <div class="mt-10 p-4 bg-[#203A5F] text-white rounded-xl flex items-center justify-between">
+            <p class="text-sm italic">"The model doesn't know where you are going. It knows which words usually follow this pattern."</p>
+            <button class="bg-white text-[#203A5F] px-4 py-2 rounded-lg font-bold text-sm hover:bg-[#EAEAEA]" onclick="location.reload()">Reset View</button>
+        </div>
+    </div>
+
+    <script>
+        function select(index) {
+            const rows = document.querySelectorAll('.flex.items-center');
+            rows.forEach((r, i) => {
+                if(i-1 === index) r.classList.add('selected-row');
+                else r.classList.remove('selected-row');
+            });
+        }
+    </script>
+</body>
+</html>

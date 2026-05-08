@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Embedding Space Visualization</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --brand-blue: #165D9E;
+            --brand-dark: #203A5F;
+            --brand-silver: #EAEAEA;
+            --brand-gray: #737373;
+        }
+        body { font-family: 'Inter', sans-serif; background-color: white; user-select: none; }
+        .grid-line { stroke: #EAEAEA; stroke-width: 1; }
+        .node { cursor: grab; transition: r 0.2s ease; }
+        .node:active { cursor: grabbing; }
+        .node:hover { r: 10; }
+        .label { font-size: 14px; font-weight: 600; fill: #203A5F; pointer-events: none; }
+        .distance-line { stroke: #165D9E; stroke-dasharray: 4; stroke-width: 2; opacity: 0.4; }
+    </style>
+</head>
+<body class="flex flex-col items-center justify-center min-h-screen p-4">
+
+    <div class="w-full max-w-4xl bg-white rounded-2xl shadow-2xl border border-[#EAEAEA] overflow-hidden">
+        <div class="p-6 border-b border-[#EAEAEA] flex justify-between items-center bg-[#F9FAFB]">
+            <div>
+                <h2 class="text-xl font-bold text-[#203A5F]">Meaning as Geometry</h2>
+                <p class="text-[#737373] text-sm">Drag tokens to explore similarity. Closer = More Related.</p>
+            </div>
+            <button onclick="resetNodes()" class="px-4 py-2 bg-[#165D9E] text-white rounded-lg text-sm hover:bg-[#203A5F] transition-colors">
+                Reset Layout
+            </button>
+        </div>
+
+        <div class="relative bg-white" id="container">
+            <svg id="canvas" width="800" height="500" viewBox="0 0 800 500" class="w-full h-auto">
+                <!-- Grid Lines -->
+                <g id="grid"></g>
+                <!-- Distance Lines -->
+                <g id="lines"></g>
+                <!-- Points -->
+                <g id="nodes"></g>
+            </svg>
+            
+            <!-- Tooltip/Distance Indicator -->
+            <div id="status" class="absolute bottom-4 left-6 bg-[#203A5F] text-white px-4 py-2 rounded-full text-xs font-mono shadow-lg">
+                Proximity: Adjusting...
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const svg = document.getElementById('canvas');
+        const nodeGroup = document.getElementById('nodes');
+        const lineGroup = document.getElementById('lines');
+        const gridGroup = document.getElementById('grid');
+        const status = document.getElementById('status');
+
+        let words = [
+            { id: 'king', label: '👑 King', x: 200, y: 150, color: '#165D9E' },
+            { id: 'queen', label: '👸 Queen', x: 250, y: 180, color: '#165D9E' },
+            { id: 'man', label: '👨 Man', x: 200, y: 350, color: '#737373' },
+            { id: 'woman', label: '👩 Woman', x: 250, y: 380, color: '#737373' },
+            { id: 'apple', label: '🍎 Apple', x: 600, y: 150, color: '#e11d48' },
+            { id: 'banana', label: '🍌 Banana', x: 650, y: 200, color: '#eab308' },
+        ];
+
+        const initialWords = JSON.parse(JSON.stringify(words));
+
+        let draggedNode = null;
+
+        function createGrid() {
+            for (let i = 0; i <= 800; i += 50) {
+                const l = document.createElementNS("http://www.w3.org/2000/svg", "line");
+                l.setAttribute("x1", i); l.setAttribute("y1", 0);
+                l.setAttribute("x2", i); l.setAttribute("y2", 500);
+                l.classList.add("grid-line");
+                gridGroup.appendChild(l);
+            }
+            for (let i = 0; i <= 500; i += 50) {
+                const l = document.createElementNS("http://www.w3.org/2000/svg", "line");
+                l.setAttribute("x1", 0); l.setAttribute("y1", i);
+                l.setAttribute("x2", 800); l.setAttribute("y2", i);
+                l.classList.add("grid-line");
+                gridGroup.appendChild(l);
+            }
+        }
+
+        function render() {
+            nodeGroup.innerHTML = '';
+            lineGroup.innerHTML = '';
+
+            // Draw line between King and Queen for demo
+            const king = words.find(w => w.id === 'king');
+            const queen = words.find(w => w.id === 'queen');
+            const dist = Math.sqrt(Math.pow(king.x - queen.x, 2) + Math.pow(king.y - queen.y, 2)).toFixed(0);
+            
+            const l = document.createElementNS("http://www.w3.org/2000/svg", "line");
+            l.setAttribute("x1", king.x); l.setAttribute("y1", king.y);
+            l.setAttribute("x2", queen.x); l.setAttribute("y2", queen.y);
+            l.classList.add("distance-line");
+            lineGroup.appendChild(l);
+
+            status.textContent = `Distance [King ↔ Queen]: ${dist} units`;
+
+            words.forEach(word => {
+                const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+                
+                const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+                circle.setAttribute("cx", word.x);
+                circle.setAttribute("cy", word.y);
+                circle.setAttribute("r", 8);
+                circle.setAttribute("fill", word.color);
+                circle.classList.add("node");
+                
+                circle.addEventListener('mousedown', (e) => startDrag(e, word));
+
+                const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                text.setAttribute("x", word.x + 12);
+                text.setAttribute("y", word.y + 5);
+                text.textContent = word.label;
+                text.classList.add("label");
+
+                g.appendChild(circle);
+                g.appendChild(text);
+                nodeGroup.appendChild(g);
+            });
+        }
+
+        function startDrag(e, word) {
+            draggedNode = word;
+        }
+
+        window.addEventListener('mousemove', (e) => {
+            if (draggedNode) {
+                const rect = svg.getBoundingClientRect();
+                const scaleX = 800 / rect.width;
+                const scaleY = 500 / rect.height;
+                draggedNode.x = (e.clientX - rect.left) * scaleX;
+                draggedNode.y = (e.clientY - rect.top) * scaleY;
+                render();
+            }
+        });
+
+        window.addEventListener('mouseup', () => {
+            draggedNode = null;
+        });
+
+        function resetNodes() {
+            words = JSON.parse(JSON.stringify(initialWords));
+            render();
+        }
+
+        createGrid();
+        render();
+    </script>
+</body>
+</html>

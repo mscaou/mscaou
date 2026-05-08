@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Act 5 Slide 5.2 - The Transformer Shift</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FFFFFF;
+            color: #203A5F;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        h2 {
+            color: #165D9E;
+            font-size: 2.5rem;
+            position: absolute;
+            top: 20px;
+        }
+
+        .container {
+            width: 80%;
+            display: flex;
+            flex-direction: column;
+            gap: 4rem;
+        }
+
+        .row {
+            display: flex;
+            align-items: center;
+            /* gap: 2rem; */
+        }
+
+        .label {
+            width: 200px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #737373;
+        }
+
+        .tokens {
+            display: flex;
+            gap: 1rem;
+            position: relative;
+        }
+
+        .token {
+            width: 60px;
+            height: 60px;
+            background: #E0E0E0;
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: 600;
+            color: #203A5F;
+            transition: all 0.5s;
+        }
+
+        .token.active {
+            background: #165D9E;
+            color: white;
+            transform: scale(1.1);
+        }
+
+        /* RNN Animation */
+        .rnn-token {
+            opacity: 0.3;
+        }
+
+        /* Transformer Animation */
+        .trans-token {
+            opacity: 1;
+        }
+
+        .connector {
+            height: 2px;
+            background: #165D9E;
+            width: 20px;
+        }
+
+        .eye {
+            position: absolute;
+            top: -40px;
+            font-size: 2rem;
+            transition: left 0.5s;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h2>The Transformer Shift</h2>
+
+    <div class="container">
+
+        <!-- RNN Row -->
+        <div class="row">
+            <div class="label">Old (RNN)</div>
+            <div class="tokens" id="rnn-container">
+                <div class="eye" id="rnn-eye">👁️</div>
+                <div class="token rnn-token">A</div>
+                <div class="connector"></div>
+                <div class="token rnn-token">B</div>
+                <div class="connector"></div>
+                <div class="token rnn-token">C</div>
+                <div class="connector"></div>
+                <div class="token rnn-token">D</div>
+            </div>
+        </div>
+
+        <!-- Transformer Row -->
+        <div class="row">
+            <div class="label" style="color: #165D9E;">Transformer</div>
+            <div class="tokens" id="trans-container">
+                <div class="eye" style="left: 45%; color: #165D9E;">👁️ 👁️ 👁️</div>
+                <div class="token trans-token" style="background: #E3F2FD;">A</div>
+                <div class="token trans-token" style="background: #E3F2FD;">B</div>
+                <div class="token trans-token" style="background: #E3F2FD;">C</div>
+                <div class="token trans-token" style="background: #E3F2FD;">D</div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // RNN: Move eye and fade previous
+        const rnnTokens = document.querySelectorAll('.rnn-token');
+        const rnnEye = document.getElementById('rnn-eye');
+        let rnnIdx = 0;
+
+        function animateRNN() {
+            // Reset
+            rnnTokens.forEach(t => { t.classList.remove('active'); t.style.opacity = 0.3; });
+
+            // Activate current
+            const t = rnnTokens[rnnIdx];
+            t.classList.add('active');
+            t.style.opacity = 1;
+
+            // Move eye
+            rnnEye.style.left = (t.offsetLeft + 10) + 'px';
+
+            // Fade previous more
+            if (rnnIdx > 0) rnnTokens[rnnIdx - 1].style.opacity = 0.5;
+            if (rnnIdx > 1) rnnTokens[rnnIdx - 2].style.opacity = 0.2;
+
+            rnnIdx = (rnnIdx + 1) % rnnTokens.length;
+            setTimeout(animateRNN, 1000);
+        }
+
+        animateRNN();
+
+        // Transformer: Pulse all
+        const transTokens = document.querySelectorAll('.trans-token');
+        function animateTrans() {
+            transTokens.forEach(t => t.classList.add('active'));
+            setTimeout(() => {
+                transTokens.forEach(t => t.classList.remove('active'));
+            }, 1000);
+            setTimeout(animateTrans, 2000);
+        }
+        animateTrans();
+
+    </script>
+</body>
+
+</html>

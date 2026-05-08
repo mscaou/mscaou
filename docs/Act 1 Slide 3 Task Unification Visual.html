@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .tool-box {
+            transition: all 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            background: #EAEAEA;
+            border: 2px solid #737373;
+        }
+        .llm-core {
+            transition: all 1s ease;
+            box-shadow: 0 0 0 0 rgba(22, 93, 158, 0);
+        }
+        .llm-core.active {
+            box-shadow: 0 0 40px 10px rgba(22, 93, 158, 0.4);
+            transform: scale(1.1);
+        }
+        .hidden-tool {
+            opacity: 0;
+            transform: scale(0) translate(0, 0) !important;
+        }
+    </style>
+</head>
+<body class="bg-white p-8 flex flex-col items-center justify-center min-h-screen font-sans">
+    
+    <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold text-[#203A5F]">The Interface Shift</h2>
+        <p class="text-[#737373]">From a toolbox of narrow apps to a single control surface.</p>
+    </div>
+
+    <div class="relative w-full max-w-2xl h-80 flex items-center justify-center">
+        <!-- Central LLM -->
+        <div id="llm" class="llm-core w-40 h-40 rounded-3xl bg-[#203A5F] flex flex-col items-center justify-center text-white z-20">
+            <svg class="w-12 h-12 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path></svg>
+            <span class="font-bold text-sm">LLM</span>
+        </div>
+
+        <!-- Distributed Tools -->
+        <div id="t1" class="tool-box absolute p-4 rounded-lg w-32 text-center" style="transform: translate(-200px, -100px)">
+            <span class="text-xs font-bold text-[#203A5F]">Translation</span>
+        </div>
+        <div id="t2" class="tool-box absolute p-4 rounded-lg w-32 text-center" style="transform: translate(200px, -100px)">
+            <span class="text-xs font-bold text-[#203A5F]">Summarization</span>
+        </div>
+        <div id="t3" class="tool-box absolute p-4 rounded-lg w-32 text-center" style="transform: translate(-200px, 100px)">
+            <span class="text-xs font-bold text-[#203A5F]">Code Debugger</span>
+        </div>
+        <div id="t4" class="tool-box absolute p-4 rounded-lg w-32 text-center" style="transform: translate(200px, 100px)">
+            <span class="text-xs font-bold text-[#203A5F]">Sentiment</span>
+        </div>
+    </div>
+
+    <button onclick="collapse()" id="actionBtn" class="mt-12 bg-[#165D9E] hover:bg-[#203A5F] text-white px-8 py-3 rounded-full font-bold transition-all transform active:scale-95 shadow-lg">
+        Collapse into One Interface
+    </button>
+
+    <div id="msg" class="mt-8 text-[#165D9E] font-bold text-xl opacity-0 transition-opacity duration-500">
+        "Language became the API"
+    </div>
+
+    <script>
+        let isCollapsed = false;
+        function collapse() {
+            if(isCollapsed) {
+                location.reload();
+                return;
+            }
+            
+            const tools = ['t1', 't2', 't3', 't4'];
+            tools.forEach(id => {
+                const el = document.getElementById(id);
+                el.classList.add('hidden-tool');
+            });
+
+            document.getElementById('llm').classList.add('active');
+            document.getElementById('msg').classList.remove('opacity-0');
+            document.getElementById('actionBtn').innerText = "Reset View";
+            isCollapsed = true;
+        }
+    </script>
+</body>
+</html>

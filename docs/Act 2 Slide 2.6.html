@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Act 2 Slide 2.6 - Why Small Models Matter</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FFFFFF;
+            color: #203A5F;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        h2 {
+            color: #165D9E;
+            font-size: 2.5rem;
+            position: absolute;
+            top: 20px;
+        }
+
+        .container {
+            display: flex;
+            width: 80%;
+            height: 60%;
+            gap: 4rem;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .device {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        .icon-container {
+            font-size: 10rem;
+            color: #203A5F;
+            position: relative;
+            margin-bottom: 2rem;
+            width: 200px;
+            height: 200px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Laptop Screen Content - The 'Open' part */
+        .screen-content {
+            position: absolute;
+            top: 45px;
+            /* Adjust based on icon */
+            left: 28px;
+            width: 144px;
+            height: 85px;
+            background: #000;
+            overflow: hidden;
+            border-radius: 4px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
+
+        .matrix-text {
+            color: #0F0;
+            font-family: monospace;
+            font-size: 0.5rem;
+            line-height: 0.6rem;
+            white-space: pre-wrap;
+            animation: scrollUp 5s linear infinite;
+        }
+
+        @keyframes scrollUp {
+            from {
+                transform: translateY(0);
+            }
+
+            to {
+                transform: translateY(-50%);
+            }
+        }
+
+        /* Cloud Lock */
+        .lock-badge {
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            color: #F44336;
+            font-size: 3rem;
+            background: white;
+            border-radius: 50%;
+            padding: 5px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .label {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #165D9E;
+            margin-bottom: 0.5rem;
+        }
+
+        .desc {
+            font-size: 1.1rem;
+            color: #737373;
+            text-align: center;
+            max-width: 300px;
+        }
+
+        /* Specific Icon Adjustments */
+        .fa-laptop {
+            transform: scale(1.5);
+        }
+
+        .fa-cloud {
+            transform: scale(1.5);
+            color: #E0E0E0;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h2>Why Small Models Matter</h2>
+
+    <div class="container">
+        <!-- Local Model -->
+        <div class="device">
+            <div class="icon-container">
+                <i class="fas fa-laptop"></i>
+                <div class="screen-content">
+                    <div class="matrix-text">
+                        weights = [0.1, 0.5]<br>
+                        layer1 = compute(x)<br>
+                        loss = 0.023<br>
+                        optimize(step)<br>
+                        inspect_activations()<br>
+                        weights = [0.1, 0.5]<br>
+                        layer1 = compute(x)<br>
+                        loss = 0.023<br>
+                        optimize(step)<br>
+                        inspect_activations()<br>
+                        print(debug)
+                    </div>
+                </div>
+            </div>
+            <div class="label">Local & Observable</div>
+            <div class="desc">You can see the internals, inspect weights, and understand <i>why</i> it fails.</div>
+        </div>
+
+        <!-- Cloud Model -->
+        <div class="device">
+            <div class="icon-container">
+                <i class="fas fa-cloud"></i>
+                <i class="fas fa-lock lock-badge"></i>
+            </div>
+            <div class="label">Closed API</div>
+            <div class="desc">Powerful but opaque. You only see the output, not the process.</div>
+        </div>
+    </div>
+
+</body>
+
+</html>

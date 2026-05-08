@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Act 2 Slide 2.2 - Same Task, Different Coverage</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FFFFFF;
+            color: #203A5F;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        h2 {
+            color: #165D9E;
+            font-size: 2.5rem;
+            position: absolute;
+            top: 20px;
+        }
+
+        .comparison-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 90%;
+            height: 70%;
+            gap: 4rem;
+        }
+
+        .model-container {
+            flex: 1;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        .label {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: #737373;
+        }
+
+        canvas {
+            border: 2px solid #EAEAEA;
+            border-radius: 12px;
+            background: #FAFAFA;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .stats {
+            margin-top: 10px;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .success {
+            color: #4CAF50;
+        }
+
+        .fail {
+            color: #F44336;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h2>Same Task, Different Coverage</h2>
+
+    <div class="comparison-container">
+        <!-- Small Model -->
+        <div class="model-container">
+            <div class="label">Small Model (Low Coverage)</div>
+            <canvas id="canvasSmall" width="400" height="400"></canvas>
+            <div class="stats">
+                <span class="success">Success: <span id="s-success">0</span></span> |
+                <span class="fail">Fail: <span id="s-fail">0</span></span>
+            </div>
+        </div>
+
+        <!-- Large Model -->
+        <div class="model-container">
+            <div class="label">Large Model (High Coverage)</div>
+            <canvas id="canvasLarge" width="400" height="400"></canvas>
+            <div class="stats">
+                <span class="success">Success: <span id="l-success">0</span></span> |
+                <span class="fail">Fail: <span id="l-fail">0</span></span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        class Simulation {
+            constructor(canvasId, capacityRadius, statsIdPrefix) {
+                this.canvas = document.getElementById(canvasId);
+                this.ctx = this.canvas.getContext('2d');
+                this.width = this.canvas.width;
+                this.height = this.canvas.height;
+                this.centerX = this.width / 2;
+                this.centerY = this.height / 2;
+                this.capacityRadius = capacityRadius;
+
+                this.statsSuccess = document.getElementById(statsIdPrefix + '-success');
+                this.statsFail = document.getElementById(statsIdPrefix + '-fail');
+
+                this.successCount = 0;
+                this.failCount = 0;
+                this.particles = [];
+
+                this.loop();
+                setInterval(() => this.spawnParticle(), 200);
+            }
+
+            spawnParticle() {
+                // Spawn random query/task points
+                const angle = Math.random() * Math.PI * 2;
+                // Distribute points somewhat normally around center to simulate task distribution space
+                // Using Box-Muller transform for normal distribution approximation or just random in radius
+                // Let's use simple random within a max task radius (which is larger than small model capacity)
+                const maxTaskRadius = 180;
+                const r = Math.sqrt(Math.random()) * maxTaskRadius;
+
+                const x = this.centerX + r * Math.cos(angle);
+                const y = this.centerY + r * Math.sin(angle);
+
+                this.particles.push({
+                    x: x,
+                    y: y,
+                    r: 0,
+                    maxR: 5,
+                    life: 100,
+                    status: (r <= this.capacityRadius) ? 'success' : 'fail'
+                });
+
+                if (r <= this.capacityRadius) this.successCount++;
+                else this.failCount++;
+
+                this.updateStats();
+            }
+
+            updateStats() {
+                this.statsSuccess.innerText = this.successCount;
+                this.statsFail.innerText = this.failCount;
+            }
+
+            draw() {
+                this.ctx.clearRect(0, 0, this.width, this.height);
+
+                // Draw Capacity Circle
+                this.ctx.beginPath();
+                this.ctx.arc(this.centerX, this.centerY, this.capacityRadius, 0, Math.PI * 2);
+                this.ctx.fillStyle = 'rgba(22, 93, 158, 0.1)';
+                this.ctx.fill();
+                this.ctx.strokeStyle = '#165D9E';
+                this.ctx.lineWidth = 2;
+                this.ctx.stroke();
+
+                // Draw Label
+                this.ctx.fillStyle = '#165D9E';
+                this.ctx.font = '14px Inter';
+                this.ctx.textAlign = 'center';
+                this.ctx.fillText("Valid Knowledge Space", this.centerX, this.centerY + this.capacityRadius + 20);
+
+
+                // Draw Particles
+                this.particles.forEach((p, i) => {
+                    this.ctx.beginPath();
+                    this.ctx.arc(p.x, p.y, p.maxR, 0, Math.PI * 2);
+
+                    if (p.status === 'success') {
+                        this.ctx.fillStyle = '#4CAF50';
+                        // Draw checkmark roughly
+                    } else {
+                        this.ctx.fillStyle = '#F44336';
+                        // Draw X roughly
+                    }
+                    this.ctx.fill();
+
+                    p.life--;
+                    if (p.life <= 0) {
+                        this.particles.splice(i, 1);
+                    }
+                });
+            }
+
+            loop() {
+                this.draw();
+                requestAnimationFrame(() => this.loop());
+            }
+        }
+
+        // Initialize
+        // Small Model: Small radius (e.g., 80)
+        new Simulation('canvasSmall', 80, 's');
+
+        // Large Model: Large radius (e.g., 160)
+        new Simulation('canvasLarge', 160, 'l');
+
+    </script>
+</body>
+
+</html>

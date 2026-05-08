@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Layer Refinement Visualizer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --brand-blue: #165D9E;
+            --brand-dark: #203A5F;
+            --brand-black: #000000;
+            --brand-white: #FFFFFF;
+            --brand-silver: #EAEAEA;
+            --brand-gray: #737373;
+        }
+
+        body {
+            background-color: var(--brand-white);
+            color: var(--brand-black);
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            overflow: hidden;
+        }
+
+        .layer-node {
+            border: 1px solid var(--brand-silver);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            background: white;
+        }
+
+        .layer-node.active {
+            border-color: var(--brand-blue);
+            box-shadow: 0 10px 25px -5px rgba(22, 93, 158, 0.2);
+            transform: translateX(10px);
+        }
+
+        .layer-node.completed {
+            background-color: #f8fafc;
+            border-color: var(--brand-gray);
+        }
+
+        .vector-bar {
+            height: 6px;
+            background: var(--brand-silver);
+            border-radius: 3px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .vector-fill {
+            height: 100%;
+            width: 0%;
+            background: var(--brand-blue);
+            transition: width 0.8s ease-in-out;
+        }
+
+        .step-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--brand-silver);
+            transition: all 0.3s ease;
+        }
+
+        .step-indicator.active {
+            background: var(--brand-blue);
+            transform: scale(1.3);
+            box-shadow: 0 0 0 4px rgba(22, 93, 158, 0.1);
+        }
+
+        .btn-primary {
+            background-color: var(--brand-blue);
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--brand-dark);
+            transform: translateY(-1px);
+        }
+
+        .connector {
+            position: absolute;
+            left: -20px;
+            top: 50%;
+            width: 20px;
+            height: 2px;
+            background: var(--brand-silver);
+        }
+
+        .active .connector {
+            background: var(--brand-blue);
+        }
+    </style>
+</head>
+<body class="p-4 md:p-12 flex items-center justify-center min-h-screen">
+
+    <div class="max-w-5xl w-full grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        
+        <!-- Left Column: The Stack (Visual Model) -->
+        <div class="lg:col-span-5 space-y-6 relative">
+            <div class="absolute left-6 top-8 bottom-8 w-0.5 bg-brand-silver -z-10"></div>
+            
+            <!-- Output/Prediction -->
+            <div id="layer-3" class="layer-node p-5 rounded-xl ml-6">
+                <div class="flex justify-between items-center mb-3">
+                    <span class="text-[10px] font-bold text-brand-gray uppercase tracking-widest">Final Layer (N)</span>
+                    <span class="text-[10px] font-bold text-brand-blue opacity-0 transition-opacity duration-500" id="label-3">Resolved</span>
+                </div>
+                <div class="space-y-2">
+                    <div class="vector-bar"><div class="vector-fill" id="fill-3"></div></div>
+                    <div class="vector-bar w-2/3"><div class="vector-fill" id="fill-3b"></div></div>
+                </div>
+                <div class="connector"></div>
+            </div>
+
+            <!-- Intermediate -->
+            <div id="layer-2" class="layer-node p-5 rounded-xl ml-6">
+                <div class="flex justify-between items-center mb-3">
+                    <span class="text-[10px] font-bold text-brand-gray uppercase tracking-widest">Intermediate Layer</span>
+                    <span class="text-[10px] font-bold text-brand-blue opacity-0 transition-opacity duration-500" id="label-2">Contextualizing</span>
+                </div>
+                <div class="space-y-2">
+                    <div class="vector-bar"><div class="vector-fill" id="fill-2"></div></div>
+                    <div class="vector-bar w-5/6"><div class="vector-fill" id="fill-2b"></div></div>
+                </div>
+                <div class="connector"></div>
+            </div>
+
+            <!-- Initial Patterns -->
+            <div id="layer-1" class="layer-node p-5 rounded-xl ml-6">
+                <div class="flex justify-between items-center mb-3">
+                    <span class="text-[10px] font-bold text-brand-gray uppercase tracking-widest">Initial Layer</span>
+                    <span class="text-[10px] font-bold text-brand-blue opacity-0 transition-opacity duration-500" id="label-1">Analyzing Patterns</span>
+                </div>
+                <div class="space-y-2">
+                    <div class="vector-bar"><div class="vector-fill" id="fill-1"></div></div>
+                    <div class="vector-bar w-1/2"><div class="vector-fill" id="fill-1b"></div></div>
+                </div>
+                <div class="connector"></div>
+            </div>
+
+            <!-- Input Base -->
+            <div class="bg-brand-dark p-6 rounded-xl shadow-lg ml-6 text-white flex items-center justify-between">
+                <div>
+                    <span class="text-[10px] font-bold opacity-60 uppercase tracking-widest block mb-1">Input Embedding</span>
+                    <span class="text-2xl font-light italic">"it"</span>
+                </div>
+                <div class="text-right">
+                    <div class="flex gap-1">
+                        <div class="w-1 h-4 bg-white/20"></div>
+                        <div class="w-1 h-6 bg-white/40"></div>
+                        <div class="w-1 h-3 bg-white/20"></div>
+                        <div class="w-1 h-5 bg-white/50"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column: Information & Controls -->
+        <div class="lg:col-span-7 space-y-8">
+            <div class="space-y-2">
+                <h1 class="text-4xl font-bold text-brand-dark tracking-tight">The Path to Prediction</h1>
+                <p class="text-brand-gray text-lg max-w-md">Layers progressively refine vectors into context-aware representations.</p>
+            </div>
+            
+            <div id="info-card" class="bg-brand-silver/30 p-8 rounded-2xl border border-brand-silver min-h-[220px] transition-all duration-300">
+                <div class="flex items-center gap-4 mb-4">
+                    <div id="step-num" class="text-brand-blue font-black text-4xl">00</div>
+                    <div>
+                        <h3 id="step-title" class="text-brand-dark font-bold text-xl uppercase tracking-tight">Initial State</h3>
+                        <div class="flex gap-2 mt-1">
+                            <div class="step-indicator active" id="ind-0"></div>
+                            <div class="step-indicator" id="ind-1"></div>
+                            <div class="step-indicator" id="ind-2"></div>
+                            <div class="step-indicator" id="ind-3"></div>
+                        </div>
+                    </div>
+                </div>
+                <p id="step-desc" class="text-brand-gray leading-relaxed text-lg">
+                    The token starts as a raw vector. It represents the word itself but lacks any understanding of its surroundings.
+                </p>
+            </div>
+
+            <div class="flex gap-4">
+                <button onclick="processStep()" id="main-btn" class="flex-1 btn-primary text-white py-5 rounded-xl font-bold text-lg shadow-lg">
+                    Process Next Layer
+                </button>
+                <button onclick="reset()" class="px-6 py-5 border-2 border-brand-silver rounded-xl text-brand-gray hover:bg-brand-silver/50 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentStep = 0;
+        const totalSteps = 3;
+
+        const stepData = [
+            {
+                title: "Pattern Identification",
+                desc: "The first layer identifies basic structure. The model notes that 'it' is a pronoun, but the reference remains ambiguous.",
+                fill: [40, 30]
+            },
+            {
+                title: "Relational Context",
+                desc: "Self-attention mechanisms trigger. The vector 'it' begins to absorb information from surrounding nouns: 'cat' and 'mouse'.",
+                fill: [75, 65]
+            },
+            {
+                title: "Semantic Resolution",
+                desc: "High-level abstractions finalize the meaning. Contextual clues like 'hungry' lead the model to resolve 'it' as 'cat'.",
+                fill: [100, 100]
+            }
+        ];
+
+        function processStep() {
+            if (currentStep >= totalSteps) return;
+
+            currentStep++;
+            const data = stepData[currentStep - 1];
+
+            // Update UI Layers
+            const layer = document.getElementById(`layer-${currentStep}`);
+            layer.classList.add('active');
+            if (currentStep > 1) {
+                document.getElementById(`layer-${currentStep-1}`).classList.replace('active', 'completed');
+            }
+
+            // Update Fills
+            document.getElementById(`fill-${currentStep}`).style.width = data.fill[0] + '%';
+            document.getElementById(`fill-${currentStep}b`).style.width = data.fill[1] + '%';
+            document.getElementById(`label-${currentStep}`).style.opacity = '1';
+
+            // Update Info Card
+            document.getElementById('step-num').innerText = `0${currentStep}`;
+            document.getElementById('step-title').innerText = data.title;
+            document.getElementById('step-desc').innerText = data.desc;
+
+            // Update Indicators
+            document.querySelectorAll('.step-indicator').forEach((ind, i) => {
+                ind.classList.toggle('active', i === currentStep);
+            });
+
+            if (currentStep === totalSteps) {
+                document.getElementById('main-btn').innerText = "Refinement Complete";
+                document.getElementById('main-btn').classList.replace('btn-primary', 'bg-brand-gray');
+            }
+        }
+
+        function reset() {
+            currentStep = 0;
+            document.getElementById('step-num').innerText = "00";
+            document.getElementById('step-title').innerText = "Initial State";
+            document.getElementById('step-desc').innerText = "The token starts as a raw vector. It represents the word itself but lacks any understanding of its surroundings.";
+            
+            document.getElementById('main-btn').innerText = "Process Next Layer";
+            document.getElementById('main-btn').className = "flex-1 btn-primary text-white py-5 rounded-xl font-bold text-lg shadow-lg";
+
+            for(let i=1; i<=3; i++) {
+                const node = document.getElementById(`layer-${i}`);
+                node.classList.remove('active', 'completed');
+                document.getElementById(`fill-${i}`).style.width = '0%';
+                document.getElementById(`fill-${i}b`).style.width = '0%';
+                document.getElementById(`label-${i}`).style.opacity = '0';
+            }
+
+            document.querySelectorAll('.step-indicator').forEach((ind, i) => {
+                ind.classList.toggle('active', i === 0);
+            });
+        }
+    </script>
+</body>
+</html>

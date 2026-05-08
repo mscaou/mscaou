@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --brand-blue: #165D9E;
+            --brand-dark: #203A5F;
+            --brand-silver: #EAEAEA;
+        }
+        .prediction-text { color: var(--brand-blue); border-bottom: 2px dashed var(--brand-blue); cursor: help; }
+        .hidden-reason { display: none; }
+    </style>
+</head>
+<body class="bg-white p-8 font-sans">
+    <div class="max-w-2xl mx-auto">
+        <div class="bg-gray-50 rounded-2xl p-6 border-2 border-dashed border-gray-200">
+            <div class="mb-4">
+                <span class="bg-[#203A5F] text-white px-3 py-1 rounded text-xs font-bold uppercase">Prompt</span>
+                <p class="text-xl mt-3 font-medium text-gray-800">"Who was the first person to walk on the sun?"</p>
+            </div>
+
+            <div class="mt-8">
+                <span class="bg-[#165D9E] text-white px-3 py-1 rounded text-xs font-bold uppercase">LLM Response</span>
+                <div class="mt-4 p-4 bg-white rounded-xl shadow-sm border border-gray-100 min-h-[100px]">
+                    <p class="text-lg leading-relaxed">
+                        The first person to walk on the sun was <span class="prediction-text" title="The model follows the grammatical pattern of 'The first person to walk on X was Y'">Captain Helios</span> in the year <span class="prediction-text" title="A date pattern usually follows a person's name in this context">1984</span>.
+                    </p>
+                </div>
+            </div>
+
+            <div class="mt-6 flex space-x-2">
+                <div class="flex-1 bg-red-50 p-4 rounded-lg border border-red-100">
+                    <h4 class="text-red-800 font-bold text-sm">What the user sees</h4>
+                    <p class="text-xs text-red-700 mt-1">A confident, detailed, but completely impossible fact.</p>
+                </div>
+                <div class="flex-1 bg-blue-50 p-4 rounded-lg border border-blue-100">
+                    <h4 class="text-blue-800 font-bold text-sm">What the model did</h4>
+                    <p class="text-xs text-blue-700 mt-1">Continued a "historical fact" pattern because silence is not an option.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-8 text-center">
+            <p class="text-[#737373] italic">"Hallucination is not a bug. It is a feature of how prediction works when the model is ungrounded."</p>
+        </div>
+    </div>
+</body>
+</html>

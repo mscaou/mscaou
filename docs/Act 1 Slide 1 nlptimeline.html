@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --brand-blue: #165D9E;
+            --brand-dark: #203A5F;
+            --brand-silver: #EAEAEA;
+            --brand-gray: #737373;
+        }
+        body { background-color: white; font-family: sans-serif; overflow: hidden; }
+        .timeline-line { height: 4px; background: var(--brand-silver); position: relative; }
+        .progress-fill { height: 100%; background: var(--brand-blue); transition: width 0.5s ease; width: 0%; }
+        .node { 
+            transition: all 0.3s ease; 
+            border: 4px solid var(--brand-silver);
+            cursor: pointer;
+        }
+        .node.active { 
+            border-color: var(--brand-blue); 
+            transform: scale(1.2);
+            box-shadow: 0 0 15px rgba(22, 93, 158, 0.3);
+        }
+        .metric-bar { height: 8px; background: var(--brand-silver); border-radius: 4px; overflow: hidden; }
+        .metric-fill { height: 100%; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
+    </style>
+</head>
+<body class="p-8">
+    <div class="max-w-4xl mx-auto">
+        <h2 class="text-2xl font-bold mb-2 text-[#203A5F]">The Evolution of NLP</h2>
+        <p class="text-[#737373] mb-8">From rigid rules to universal flexibility.</p>
+
+        <!-- Timeline -->
+        <div class="relative mt-12 mb-16">
+            <div class="timeline-line w-full rounded-full">
+                <div id="progressFill" class="progress-fill rounded-full"></div>
+            </div>
+            
+            <div class="absolute top-1/2 -translate-y-1/2 w-full flex justify-between px-2">
+                <div onclick="selectStep(0)" class="node active w-6 h-6 rounded-full bg-white" id="node0"></div>
+                <div onclick="selectStep(1)" class="node w-6 h-6 rounded-full bg-white" id="node1"></div>
+                <div onclick="selectStep(2)" class="node w-6 h-6 rounded-full bg-white" id="node2"></div>
+                <div onclick="selectStep(3)" class="node w-6 h-6 rounded-full bg-white" id="node3"></div>
+            </div>
+        </div>
+
+        <!-- Content Card -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 bg-[#EAEAEA] p-6 rounded-xl border-l-8 border-[#165D9E]">
+            <div>
+                <h3 id="stageTitle" class="text-xl font-bold text-[#203A5F] mb-2">Rule-Based Systems</h3>
+                <p id="stageDesc" class="text-[#737373] text-sm leading-relaxed">Early systems used manually written "If-Then" logic. Extremely rigid and limited to specific syntax.</p>
+            </div>
+            <div class="space-y-4">
+                <div>
+                    <div class="flex justify-between text-xs font-bold mb-1 uppercase tracking-wider text-[#203A5F]">
+                        <span>Rigidity</span>
+                        <span id="rigidVal">100%</span>
+                    </div>
+                    <div class="metric-bar"><div id="rigidFill" class="metric-fill bg-[#203A5F]" style="width: 100%"></div></div>
+                </div>
+                <div>
+                    <div class="flex justify-between text-xs font-bold mb-1 uppercase tracking-wider text-[#165D9E]">
+                        <span>Flexibility</span>
+                        <span id="flexVal">5%</span>
+                    </div>
+                    <div class="metric-bar"><div id="flexFill" class="metric-fill bg-[#165D9E]" style="width: 5%"></div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const stages = [
+            { title: "Rule-Based Systems", desc: "Hand-coded grammar and dictionaries. If the input didn't match the rule exactly, the system failed.", rigid: 100, flex: 5 },
+            { title: "Classical ML", desc: "Statistical models (SVMs, Naive Bayes) trained on features. Better at handling noise, but still required expert engineering for every task.", rigid: 75, flex: 25 },
+            { title: "Deep Learning", desc: "Neural networks that learn representations. Huge accuracy jumps, but models were still 'Narrow Tools' built for specific datasets.", rigid: 45, flex: 60 },
+            { title: "LLMs (The Paradigm Shift)", desc: "A single model using language as an interface. No boundaries between tasks. The instructions define the behavior.", rigid: 5, flex: 100 }
+        ];
+
+        function selectStep(index) {
+            // Update Nodes
+            document.querySelectorAll('.node').forEach((n, i) => {
+                n.classList.toggle('active', i === index);
+            });
+            
+            // Update Progress
+            document.getElementById('progressFill').style.width = (index / (stages.length - 1)) * 100 + '%';
+            
+            // Update Text
+            const stage = stages[index];
+            document.getElementById('stageTitle').innerText = stage.title;
+            document.getElementById('stageDesc').innerText = stage.desc;
+            
+            // Update Metrics
+            document.getElementById('rigidVal').innerText = stage.rigid + '%';
+            document.getElementById('flexVal').innerText = stage.flex + '%';
+            document.getElementById('rigidFill').style.width = stage.rigid + '%';
+            document.getElementById('flexFill').style.width = stage.flex + '%';
+        }
+    </script>
+</body>
+</html>
