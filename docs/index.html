@@ -1,0 +1,1183 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MSC Egypt: Organizational Charter & Blueprint</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Leaflet.js for Map -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- ADDED: Google Fonts: Cairo for Arabic -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Custom Styles -->
+    <style>
+        :root {
+            --primary-blue: #165D9E;
+            --dark-blue: #203A5F;
+            --silver: #EAEAEA;
+            --main-white: #FFFFFF;
+
+            /* Mappings for existing code to new palette */
+            --microsoft-blue: var(--primary-blue);
+            --gray-text: #4a4a4a;
+            --light-gray-bg: var(--silver);
+            --dark-bg: #1a1a1a;
+            --link-hover: #124a7e;
+            --purple-accent: #165D9E;
+            /* Unifying accent color or keeping distinct if needed, let's stick to brand */
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--silver);
+            color: var(--dark-blue);
+            background-image: radial-gradient(#d1d1d1 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+
+        .section-title {
+            color: var(--dark-blue);
+            border-bottom: 4px solid var(--primary-blue);
+            padding-bottom: 0.5rem;
+            margin-bottom: 2rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            display: inline-block;
+        }
+
+        .card {
+            background-color: var(--main-white);
+            border-radius: 1rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background: var(--primary-blue);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(32, 58, 95, 0.8);
+            /* Dark Blue overlay */
+            backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 50;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background-color: var(--main-white);
+            padding: 2.5rem;
+            border-radius: 1rem;
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            transform: scale(0.95);
+            transition: transform 0.3s ease;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            border-top: 8px solid var(--primary-blue);
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: scale(1);
+        }
+
+        .leaflet-popup-content-wrapper,
+        .leaflet-popup-tip {
+            background: var(--dark-blue);
+            color: var(--main-white);
+            border-radius: 8px;
+        }
+
+        .leaflet-popup-content {
+            font-weight: bold;
+        }
+
+        .leaflet-container a.leaflet-popup-close-button {
+            color: var(--main-white);
+        }
+
+        /* ADDED: Arabic Text Style */
+        .arabic-text {
+            font-family: 'Cairo', sans-serif;
+            direction: rtl;
+            text-align: right;
+            line-height: 1.6;
+        }
+
+        /* ADDED: Style for the season selector */
+        .season-select {
+            background-color: var(--main-white);
+            color: var(--dark-blue);
+            border: 2px solid var(--primary-blue);
+            border-radius: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            font-weight: 700;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23165D9E' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 1.2em 1.2em;
+            padding-right: 3rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Infographic Elements */
+        .info-step {
+            position: relative;
+            padding-left: 2rem;
+            border-left: 4px solid var(--silver);
+        }
+
+        .info-step::before {
+            content: '';
+            position: absolute;
+            left: -10px;
+            top: 0;
+            width: 16px;
+            height: 16px;
+            background: var(--primary-blue);
+            border-radius: 50%;
+        }
+
+        .info-connector {
+            display: none;
+            /* Hidden on mobile by default */
+        }
+
+        @media (min-width: 768px) {
+            .info-connector {
+                display: block;
+                height: 4px;
+                background: var(--silver);
+                flex-grow: 1;
+                margin: 0 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body class="antialiased overflow-x-hidden">
+
+    <!-- Header -->
+    <header class="py-12 bg-white shadow-sm border-b-4 border-[var(--primary-blue)]">
+        <div class="container mx-auto max-w-7xl text-center px-4">
+            <div class="flex flex-col md:flex-row items-center justify-center gap-6 mb-6">
+                <img src="logo.jpg" alt="MSC Logo" class="w-24 h-24 md:w-32 md:h-32 object-contain drop-shadow-md"
+                    onerror="this.style.display='none'">
+                <div class="text-center md:text-left">
+                    <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight text-[var(--dark-blue)] mb-2">MSC AOU
+                        Egypt</h1>
+                    <p class="text-xl md:text-2xl font-medium text-[var(--primary-blue)] uppercase tracking-wide">
+                        Organizational Charter & Blueprint</p>
+                </div>
+            </div>
+
+            <!-- Season Selector Dropdown -->
+            <div class="mt-8">
+                <select id="seasonSelector"
+                    class="season-select cursor-pointer text-lg shadow-lg hover:shadow-xl transition-shadow">
+                    <option value="">Select Season Blueprint...</option>
+                    <option value="season-2025-2026.html">2025-2026 Season</option>
+                    <option value="">2026-2027 Season (Soon)</option>
+                </select>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto max-w-7xl p-4 md:p-12 space-y-20">
+
+        <!-- Vision & Mission -->
+        <section id="vision-mission">
+            <div class="flex flex-col md:flex-row gap-8 items-stretch">
+                <div class="card p-8 flex-1 border-l-8 border-[var(--primary-blue)]">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="bg-[var(--primary-blue)] text-white p-3 rounded-full">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <line x1="2" y1="12" x2="22" y2="12"></line>
+                                <path
+                                    d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z">
+                                </path>
+                            </svg>
+                        </div>
+                        <h2 class="text-3xl font-bold text-[var(--dark-blue)]">Vision</h2>
+                    </div>
+                    <p class="text-gray-700 text-xl leading-relaxed">"To build a unified, community of student
+                        technologists across Egypt, acting as the primary talent pipeline that connects our universities
+                        with the global tech industry."</p>
+                    <p class="text-gray-500 text-lg arabic-text mt-6 border-t pt-4">"نهدف إننا نوحّد طلاب الـ IT في مصر
+                        في مجتمع واحد، يكون حلقة وصل بين جامعاتنا وشركات التكنولوجيا في السوق."</p>
+                </div>
+
+                <!-- Visual Connector for Desktop -->
+                <div class="hidden md:flex items-center justify-center">
+                    <div
+                        class="w-12 h-12 bg-[var(--silver)] rounded-full flex items-center justify-center text-[var(--dark-blue)] font-bold text-xl shadow-inner">
+                        &</div>
+                </div>
+
+                <div class="card p-8 flex-1 border-l-8 border-[var(--dark-blue)]">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="bg-[var(--dark-blue)] text-white p-3 rounded-full">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path
+                                    d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z">
+                                </path>
+                            </svg>
+                        </div>
+                        <h2 class="text-3xl font-bold text-[var(--dark-blue)]">Mission</h2>
+                    </div>
+                    <p class="text-gray-700 text-xl leading-relaxed">"Empowering Egyptian university students by
+                        providing hands-on training in Microsoft technologies, fostering a national network, and
+                        creating pathways to careers."</p>
+                    <p class="text-gray-500 text-lg arabic-text mt-6 border-t pt-4">"مهمتنا نساعد طلاب الجامعات في مصر
+                        يتعلموا تقنيات مايكروسوفت بشكل عملي، ونتيح لهم يتواصلوا مع بعض ومع خبراء المجال."</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- The Impact on Students -->
+        <section id="student-impact">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl font-bold section-title">The Student Journey</h2>
+                <p class="text-xl text-gray-600">From Student to Professional</p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8 relative">
+                <!-- Connecting Line for Desktop -->
+                <div
+                    class="hidden md:block absolute top-12 left-0 w-full h-1 bg-gradient-to-r from-[var(--primary-blue)] via-[var(--dark-blue)] to-[var(--primary-blue)] -z-10 transform -translate-y-1/2">
+                </div>
+
+                <!-- Skills -->
+                <div class="card p-8 text-center relative bg-white">
+                    <div
+                        class="bg-[var(--primary-blue)] text-white rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-6 shadow-lg border-4 border-white">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path>
+                            <polyline points="14 2 14 8 20 8"></polyline>
+                            <line x1="16" y1="13" x2="8" y2="13"></line>
+                            <line x1="16" y1="17" x2="8" y2="17"></line>
+                            <line x1="10" y1="9" x2="8" y2="9"></line>
+                        </svg>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-2 text-[var(--dark-blue)]">1. Learn Skills</h3>
+                    <p class="text-gray-500 mb-4 font-medium">Professional & Technical Development</p>
+                    <ul class="text-left space-y-3 text-gray-700">
+                        <li class="flex items-start"><span class="text-[var(--primary-blue)] mr-2">✓</span> Hands-On
+                            Training</li>
+                        <li class="flex items-start"><span class="text-[var(--primary-blue)] mr-2">✓</span> Modern Dev
+                            Practices</li>
+                        <li class="flex items-start"><span class="text-[var(--primary-blue)] mr-2">✓</span>
+                            Certifications</li>
+                    </ul>
+                </div>
+
+                <!-- Connections -->
+                <div class="card p-8 text-center relative bg-white">
+                    <div
+                        class="bg-[var(--dark-blue)] text-white rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-6 shadow-lg border-4 border-white">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="9" cy="7" r="4"></circle>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-2 text-[var(--dark-blue)]">2. Build Network</h3>
+                    <p class="text-gray-500 mb-4 font-medium">Community & Opportunities</p>
+                    <ul class="text-left space-y-3 text-gray-700">
+                        <li class="flex items-start"><span class="text-[var(--dark-blue)] mr-2">✓</span> Industry
+                            Connections</li>
+                        <li class="flex items-start"><span class="text-[var(--dark-blue)] mr-2">✓</span> Mentorship</li>
+                        <li class="flex items-start"><span class="text-[var(--dark-blue)] mr-2">✓</span> Peer Support
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Trajectory -->
+                <div class="card p-8 text-center relative bg-white">
+                    <div
+                        class="bg-[var(--primary-blue)] text-white rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-6 shadow-lg border-4 border-white">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="12" y1="19" x2="12" y2="5"></line>
+                            <polyline points="5 12 12 5 19 12"></polyline>
+                        </svg>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-2 text-[var(--dark-blue)]">3. Advance Career</h3>
+                    <p class="text-gray-500 mb-4 font-medium">The Trajectory</p>
+                    <ul class="text-left space-y-3 text-gray-700">
+                        <li class="flex items-start"><span class="text-[var(--primary-blue)] mr-2">✓</span> Standout
+                            Portfolio</li>
+                        <li class="flex items-start"><span class="text-[var(--primary-blue)] mr-2">✓</span> Soft Skills
+                        </li>
+                        <li class="flex items-start"><span class="text-[var(--primary-blue)] mr-2">✓</span> Job Pipeline
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Community & Ecosystem (Restored Content) -->
+        <section id="community-ecosystem">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold section-title">Community & Ecosystem</h2>
+                <p class="text-xl text-gray-600">Building a National Identity</p>
+            </div>
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Collaborative Events -->
+                <div class="card p-8 text-center bg-white">
+                    <div
+                        class="bg-[var(--primary-blue)] text-white rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-6 shadow-md">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                            <line x1="16" y1="2" x2="16" y2="6"></line>
+                            <line x1="8" y1="2" x2="8" y2="6"></line>
+                            <line x1="3" y1="10" x2="21" y2="10"></line>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2 text-[var(--dark-blue)]">Collaborative Events</h3>
+                    <ul class="text-left space-y-2 text-gray-600 list-disc list-inside">
+                        <li>Annual National Hackathon</li>
+                        <li>Cross-University Speaker Series</li>
+                        <li>Inter-University Project Showcases</li>
+                    </ul>
+                </div>
+                <!-- Resource Sharing -->
+                <div class="card p-8 text-center bg-white">
+                    <div
+                        class="bg-[var(--dark-blue)] text-white rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-6 shadow-md">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                            <path d="M6.5 2H20v15H6.5A2.5 2.5 0 0 1 4 14.5V4A2 2 0 0 1 6 2z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2 text-[var(--dark-blue)]">Resource Sharing</h3>
+                    <ul class="text-left space-y-2 text-gray-600 list-disc list-inside">
+                        <li>Shared Content & Speaker Pool</li>
+                        <li>"Centers of Excellence" Model</li>
+                    </ul>
+                </div>
+                <!-- Community & Identity -->
+                <div class="card p-8 text-center bg-white">
+                    <div
+                        class="bg-[var(--primary-blue)] text-white rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-6 shadow-md">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="2" y1="12" x2="22" y2="12"></line>
+                            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1 4-10z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2 text-[var(--dark-blue)]">National Community</h3>
+                    <ul class="text-left space-y-2 text-gray-600 list-disc list-inside">
+                        <li>Inter-Club Mentorship Program</li>
+                        <li>A Unified National Voice</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- List of Activities -->
+        <section id="activities">
+            <h2 class="text-4xl font-bold text-center section-title w-fit mx-auto">List of Activities</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 text-center">
+                <button data-modal-target="education-modal"
+                    class="modal-trigger card p-6 font-bold text-lg text-[var(--dark-blue)] hover:bg-[var(--primary-blue)] hover:text-white transition-all duration-300 flex flex-col items-center justify-center gap-4 group">
+                    <span class="text-4xl group-hover:scale-110 transition-transform">🎓</span>
+                    Education & Training
+                </button>
+                <button data-modal-target="community-modal"
+                    class="modal-trigger card p-6 font-bold text-lg text-[var(--dark-blue)] hover:bg-[var(--primary-blue)] hover:text-white transition-all duration-300 flex flex-col items-center justify-center gap-4 group">
+                    <span class="text-4xl group-hover:scale-110 transition-transform">🤝</span>
+                    Community & Networking
+                </button>
+                <button data-modal-target="professional-modal"
+                    class="modal-trigger card p-6 font-bold text-lg text-[var(--dark-blue)] hover:bg-[var(--primary-blue)] hover:text-white transition-all duration-300 flex flex-col items-center justify-center gap-4 group">
+                    <span class="text-4xl group-hover:scale-110 transition-transform">💼</span>
+                    Professional Development
+                </button>
+                <button data-modal-target="impact-modal"
+                    class="modal-trigger card p-6 font-bold text-lg text-[var(--dark-blue)] hover:bg-[var(--primary-blue)] hover:text-white transition-all duration-300 flex flex-col items-center justify-center gap-4 group">
+                    <span class="text-4xl group-hover:scale-110 transition-transform">🚀</span>
+                    High-Impact Initiatives
+                </button>
+                <button data-modal-target="digital-modal"
+                    class="modal-trigger card p-6 font-bold text-lg text-[var(--dark-blue)] hover:bg-[var(--primary-blue)] hover:text-white transition-all duration-300 flex flex-col items-center justify-center gap-4 group">
+                    <span class="text-4xl group-hover:scale-110 transition-transform">📱</span>
+                    Digital Content & Outreach
+                </button>
+                <button data-modal-target="industry-modal"
+                    class="modal-trigger card p-6 font-bold text-lg text-[var(--dark-blue)] hover:bg-[var(--primary-blue)] hover:text-white transition-all duration-300 flex flex-col items-center justify-center gap-4 group">
+                    <span class="text-4xl group-hover:scale-110 transition-transform">🏭</span>
+                    Industry Immersion
+                </button>
+            </div>
+        </section>
+
+        <!-- 5-Year Vision -->
+        <section id="vision">
+            <h2 class="text-4xl font-bold text-center section-title w-fit mx-auto">The 5-Year Vision</h2>
+            <div class="relative mt-12 px-4">
+                <!-- Timeline Line -->
+                <div
+                    class="absolute h-full border-l-4 border-[var(--primary-blue)] left-4 md:left-1/2 transform md:-translate-x-1/2">
+                </div>
+
+                <!-- Timeline Items -->
+                <div class="space-y-16">
+                    <!-- Year 1 -->
+                    <div class="flex flex-col md:flex-row items-center w-full">
+                        <div class="w-full md:w-1/2 md:pr-12 pl-12 md:pl-0 md:text-right mb-4 md:mb-0 relative">
+                            <div
+                                class="absolute left-[-5px] md:right-[-14px] md:left-auto top-1 w-6 h-6 bg-[var(--primary-blue)] rounded-full border-4 border-white">
+                            </div>
+                            <p class="text-3xl font-black text-[var(--primary-blue)]">2025-2026</p>
+                            <p class="text-xl font-semibold text-gray-500">"Be Seen, Be Heard."</p>
+                        </div>
+                        <div class="w-full md:w-1/2 md:pl-12 pl-12">
+                            <div class="card p-6 bg-white border-l-4 border-[var(--primary-blue)]">
+                                <h3 class="font-bold text-xl mb-2">Goal: Foundation & Reach</h3>
+                                <p class="text-gray-600">Metric: 25,000+ online community members.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Year 2 -->
+                    <div class="flex flex-col md:flex-row items-center w-full">
+                        <div
+                            class="w-full md:w-1/2 md:pr-12 pl-12 md:pl-0 md:text-right mb-4 md:mb-0 order-1 md:order-1">
+                            <div class="card p-6 bg-white border-r-4 border-[var(--dark-blue)] md:text-right">
+                                <h3 class="font-bold text-xl mb-2">Goal: Excellence & Engagement</h3>
+                                <p class="text-gray-600">Metric: Set By the President of the year</p>
+                            </div>
+                        </div>
+                        <div class="w-full md:w-1/2 md:pl-12 pl-12 order-2 md:order-2 relative">
+                            <div
+                                class="absolute left-[-5px] top-1 w-6 h-6 bg-[var(--dark-blue)] rounded-full border-4 border-white">
+                            </div>
+                            <p class="text-3xl font-black text-[var(--dark-blue)]">2026-2027</p>
+                            <p class="text-xl font-semibold text-gray-500">"From Numbers to Value."</p>
+                        </div>
+                    </div>
+
+                    <!-- Year 3 -->
+                    <div class="flex flex-col md:flex-row items-center w-full">
+                        <div class="w-full md:w-1/2 md:pr-12 pl-12 md:pl-0 md:text-right mb-4 md:mb-0 relative">
+                            <div
+                                class="absolute left-[-5px] md:right-[-14px] md:left-auto top-1 w-6 h-6 bg-[var(--primary-blue)] rounded-full border-4 border-white">
+                            </div>
+                            <p class="text-3xl font-black text-[var(--primary-blue)]">2027-2028</p>
+                            <p class="text-xl font-semibold text-gray-500">"Leading the Conversation."</p>
+                        </div>
+                        <div class="w-full md:w-1/2 md:pl-12 pl-12">
+                            <div class="card p-6 bg-white border-l-4 border-[var(--primary-blue)]">
+                                <h3 class="font-bold text-xl mb-2">Goal: Impact & Leadership</h3>
+                                <p class="text-gray-600">Metric: Set By the President of the year.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Year 4 -->
+                    <div class="flex flex-col md:flex-row items-center w-full">
+                        <div
+                            class="w-full md:w-1/2 md:pr-12 pl-12 md:pl-0 md:text-right mb-4 md:mb-0 order-1 md:order-1">
+                            <div class="card p-6 bg-white border-r-4 border-[var(--dark-blue)] md:text-right">
+                                <h3 class="font-bold text-xl mb-2">Goal: Sustainability & Mentorship</h3>
+                                <p class="text-gray-600">Metric: Set By the President of the year.</p>
+                            </div>
+                        </div>
+                        <div class="w-full md:w-1/2 md:pl-12 pl-12 order-2 md:order-2 relative">
+                            <div
+                                class="absolute left-[-5px] top-1 w-6 h-6 bg-[var(--dark-blue)] rounded-full border-4 border-white">
+                            </div>
+                            <p class="text-3xl font-black text-[var(--dark-blue)]">2028-2029</p>
+                            <p class="text-xl font-semibold text-gray-500">"Building to Last."</p>
+                        </div>
+                    </div>
+
+                    <!-- Year 5 -->
+                    <div class="flex flex-col md:flex-row items-center w-full">
+                        <div class="w-full md:w-1/2 md:pr-12 pl-12 md:pl-0 md:text-right mb-4 md:mb-0 relative">
+                            <div
+                                class="absolute left-[-5px] md:right-[-14px] md:left-auto top-1 w-6 h-6 bg-[var(--primary-blue)] rounded-full border-4 border-white">
+                            </div>
+                            <p class="text-3xl font-black text-[var(--primary-blue)]">2029-2030</p>
+                            <p class="text-xl font-semibold text-gray-500">"Defining the Future."</p>
+                        </div>
+                        <div class="w-full md:w-1/2 md:pl-12 pl-12">
+                            <div class="card p-6 bg-white border-l-4 border-[var(--primary-blue)]">
+                                <h3 class="font-bold text-xl mb-2">Goal: Legacy & Innovation</h3>
+                                <p class="text-gray-600">Metric: Set By the President of the year.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SWOT Analysis -->
+        <section id="swot">
+            <h2 class="text-4xl font-bold text-center section-title w-fit mx-auto">SWOT Analysis</h2>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="card p-8 border-t-8 border-green-500 bg-white">
+                    <h3 class="font-black text-2xl mb-4 text-green-700 uppercase tracking-wider">Strengths</h3>
+                    <ul class="space-y-3 text-gray-700">
+                        <li class="flex items-start"><span class="text-green-500 mr-2 font-bold">+</span> Official
+                            Microsoft Backing</li>
+                        <li class="flex items-start"><span class="text-green-500 mr-2 font-bold">+</span> Networked
+                            University Structure</li>
+                        <li class="flex items-start"><span class="text-green-500 mr-2 font-bold">+</span> Passionate
+                            Volunteer Base</li>
+                    </ul>
+                </div>
+                <div class="card p-8 border-t-8 border-red-500 bg-white">
+                    <h3 class="font-black text-2xl mb-4 text-red-700 uppercase tracking-wider">Weaknesses</h3>
+                    <ul class="space-y-3 text-gray-700">
+                        <li class="flex items-start"><span class="text-red-500 mr-2 font-bold">-</span> Low Brand
+                            Recognition</li>
+                        <li class="flex items-start"><span class="text-red-500 mr-2 font-bold">-</span> Initial Skill
+                            Gap</li>
+                        <li class="flex items-start"><span class="text-red-500 mr-2 font-bold">-</span> Limited
+                            Resources</li>
+                    </ul>
+                </div>
+                <div class="card p-8 border-t-8 border-blue-500 bg-white">
+                    <h3 class="font-black text-2xl mb-4 text-blue-700 uppercase tracking-wider">Opportunities</h3>
+                    <ul class="space-y-3 text-gray-700">
+                        <li class="flex items-start"><span class="text-blue-500 mr-2 font-bold">↗</span> Leverage
+                            Digital Platforms</li>
+                        <li class="flex items-start"><span class="text-blue-500 mr-2 font-bold">↗</span>
+                            Inter-University Collaboration</li>
+                    </ul>
+                </div>
+                <div class="card p-8 border-t-8 border-yellow-500 bg-white">
+                    <h3 class="font-black text-2xl mb-4 text-yellow-700 uppercase tracking-wider">Threats</h3>
+                    <ul class="space-y-3 text-gray-700">
+                        <li class="flex items-start"><span class="text-yellow-500 mr-2 font-bold">!</span> Competition
+                        </li>
+                        <li class="flex items-start"><span class="text-yellow-500 mr-2 font-bold">!</span> Industry's
+                            Focus on Scale</li>
+                        <li class="flex items-start"><span class="text-yellow-500 mr-2 font-bold">!</span> Student
+                            Apathy</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Stakeholder Ecosystem -->
+        <section id="stakeholders">
+            <h2 class="text-4xl font-bold text-center section-title w-fit mx-auto">The Ecosystem</h2>
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mt-8">
+                <!-- University Students -->
+                <div class="card p-6 text-center cursor-pointer modal-trigger hover:bg-[var(--primary-blue)] hover:text-white group transition-all"
+                    data-modal-target="students-modal">
+                    <h3 class="text-xl font-bold mb-2 group-hover:text-white text-[var(--dark-blue)]">University
+                        Students</h3>
+                    <p class="text-sm text-gray-500 group-hover:text-blue-100 mb-4">(The Members)</p>
+                    <div class="text-sm text-left border-t pt-4 border-gray-200 group-hover:border-blue-400">
+                        <p class="mb-1"><strong class="text-green-600 group-hover:text-green-300">Gives:</strong> Time,
+                            engagement</p>
+                        <p><strong class="text-[var(--primary-blue)] group-hover:text-white">Takes:</strong> Skills,
+                            opportunities</p>
+                    </div>
+                </div>
+                <!-- Club Volunteers -->
+                <div class="card p-6 text-center cursor-pointer modal-trigger hover:bg-[var(--primary-blue)] hover:text-white group transition-all"
+                    data-modal-target="volunteers-modal">
+                    <h3 class="text-xl font-bold mb-2 group-hover:text-white text-[var(--dark-blue)]">Club Volunteers
+                    </h3>
+                    <p class="text-sm text-gray-500 group-hover:text-blue-100 mb-4">(The Core Team)</p>
+                    <div class="text-sm text-left border-t pt-4 border-gray-200 group-hover:border-blue-400">
+                        <p class="mb-1"><strong class="text-green-600 group-hover:text-green-300">Gives:</strong>
+                            Leadership</p>
+                        <p><strong class="text-[var(--primary-blue)] group-hover:text-white">Takes:</strong> Experience
+                        </p>
+                    </div>
+                </div>
+                <!-- Microsoft -->
+                <div class="card p-6 text-center cursor-pointer modal-trigger hover:bg-[var(--primary-blue)] hover:text-white group transition-all"
+                    data-modal-target="microsoft-modal">
+                    <h3 class="text-xl font-bold mb-2 group-hover:text-white text-[var(--dark-blue)]">Microsoft</h3>
+                    <p class="text-sm text-gray-500 group-hover:text-blue-100 mb-4">(The Enabler)</p>
+                    <div class="text-sm text-left border-t pt-4 border-gray-200 group-hover:border-blue-400">
+                        <p class="mb-1"><strong class="text-green-600 group-hover:text-green-300">Gives:</strong>
+                            Resources</p>
+                        <p><strong class="text-[var(--primary-blue)] group-hover:text-white">Takes:</strong> Talent
+                            pipeline</p>
+                    </div>
+                </div>
+                <!-- Industry -->
+                <div class="card p-6 text-center cursor-pointer modal-trigger hover:bg-[var(--primary-blue)] hover:text-white group transition-all"
+                    data-modal-target="industry-stakeholder-modal">
+                    <h3 class="text-xl font-bold mb-2 group-hover:text-white text-[var(--dark-blue)]">Industry</h3>
+                    <p class="text-sm text-gray-500 group-hover:text-blue-100 mb-4">(The Hirer)</p>
+                    <div class="text-sm text-left border-t pt-4 border-gray-200 group-hover:border-blue-400">
+                        <p class="mb-1"><strong class="text-green-600 group-hover:text-green-300">Gives:</strong> Jobs,
+                            mentors</p>
+                        <p><strong class="text-[var(--primary-blue)] group-hover:text-white">Takes:</strong> Skilled
+                            talent</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Our Philosophy -->
+        <section id="philosophy">
+            <h2 class="text-4xl font-bold text-center section-title w-fit mx-auto">Our Philosophy</h2>
+            <div class="grid md:grid-cols-2 gap-8 mt-8">
+                <div class="card p-8 bg-white">
+                    <h3 class="text-2xl font-bold text-center mb-6 text-[var(--dark-blue)]">For the Public: R.I.S.E.
+                    </h3>
+                    <div class="space-y-6">
+                        <div class="flex items-center">
+                            <div
+                                class="w-16 h-16 rounded-lg bg-[var(--primary-blue)] text-white flex items-center justify-center text-3xl font-black mr-4 shadow-lg">
+                                R</div>
+                            <div>
+                                <h4 class="font-bold text-lg">Reach</h4>
+                                <p class="text-gray-600">Expand opportunities for every student.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center">
+                            <div
+                                class="w-16 h-16 rounded-lg bg-[var(--primary-blue)] text-white flex items-center justify-center text-3xl font-black mr-4 shadow-lg">
+                                I</div>
+                            <div>
+                                <h4 class="font-bold text-lg">Innovate</h4>
+                                <p class="text-gray-600">Create bold ideas and solutions.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center">
+                            <div
+                                class="w-16 h-16 rounded-lg bg-[var(--primary-blue)] text-white flex items-center justify-center text-3xl font-black mr-4 shadow-lg">
+                                S</div>
+                            <div>
+                                <h4 class="font-bold text-lg">Support</h4>
+                                <p class="text-gray-600">Collaborate and lift each other up.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center">
+                            <div
+                                class="w-16 h-16 rounded-lg bg-[var(--primary-blue)] text-white flex items-center justify-center text-3xl font-black mr-4 shadow-lg">
+                                E</div>
+                            <div>
+                                <h4 class="font-bold text-lg">Empower</h4>
+                                <p class="text-gray-600">Give skills, confidence, and voice.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card p-8 bg-white">
+                    <h3 class="text-2xl font-bold text-center mb-6 text-[var(--dark-blue)]">For the Core Team:
+                        S.P.A.R.K.</h3>
+                    <div class="space-y-6">
+                        <div class="flex items-center">
+                            <div
+                                class="w-16 h-16 rounded-lg bg-[var(--dark-blue)] text-white flex items-center justify-center text-3xl font-black mr-4 shadow-lg">
+                                S</div>
+                            <div>
+                                <h4 class="font-bold text-lg">Skill</h4>
+                                <p class="text-gray-600">Build hands-on technical skills.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center">
+                            <div
+                                class="w-16 h-16 rounded-lg bg-[var(--dark-blue)] text-white flex items-center justify-center text-3xl font-black mr-4 shadow-lg">
+                                P</div>
+                            <div>
+                                <h4 class="font-bold text-lg">Passion</h4>
+                                <p class="text-gray-600">Fuel creativity and curiosity.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center">
+                            <div
+                                class="w-16 h-16 rounded-lg bg-[var(--dark-blue)] text-white flex items-center justify-center text-3xl font-black mr-4 shadow-lg">
+                                A</div>
+                            <div>
+                                <h4 class="font-bold text-lg">Advance</h4>
+                                <p class="text-gray-600">Push forward careers and projects.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center">
+                            <div
+                                class="w-16 h-16 rounded-lg bg-[var(--dark-blue)] text-white flex items-center justify-center text-3xl font-black mr-4 shadow-lg">
+                                R</div>
+                            <div>
+                                <h4 class="font-bold text-lg">Resilience</h4>
+                                <p class="text-gray-600">Grow stronger from challenges.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center">
+                            <div
+                                class="w-16 h-16 rounded-lg bg-[var(--dark-blue)] text-white flex items-center justify-center text-3xl font-black mr-4 shadow-lg">
+                                K</div>
+                            <div>
+                                <h4 class="font-bold text-lg">Knowledge</h4>
+                                <p class="text-gray-600">Spread knowledge and keep learning.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Core Team Member Criteria -->
+        <section id="team-criteria">
+            <h2 class="text-4xl font-bold text-center section-title w-fit mx-auto">Core Team Criteria</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
+                <div
+                    class="card p-6 bg-white hover:border-[var(--primary-blue)] border-2 border-transparent transition-all">
+                    <h3 class="font-bold text-xl text-[var(--dark-blue)] mb-2">1. Passionate & Curious</h3>
+                    <p class="text-gray-600">A genuine love for technology and an unstoppable desire to learn what's
+                        next.</p>
+                    <div class="mt-4 pt-4 border-t border-gray-100">
+                        <h3 class="font-bold text-lg text-[var(--dark-blue)] mb-1 arabic-text">شغوف وفضولي</h3>
+                        <p class="text-gray-500 arabic-text text-sm">يحب التكنولوجيا بجد، ودايمًا حابب يتعلم الجديد.</p>
+                    </div>
+                </div>
+                <div
+                    class="card p-6 bg-white hover:border-[var(--primary-blue)] border-2 border-transparent transition-all">
+                    <h3 class="font-bold text-xl text-[var(--dark-blue)] mb-2">2. Community-First</h3>
+                    <p class="text-gray-600">Motivation comes from empowering others; they succeed when the community
+                        succeeds.</p>
+                    <div class="mt-4 pt-4 border-t border-gray-100">
+                        <h3 class="font-bold text-lg text-[var(--dark-blue)] mb-1 arabic-text">يهتم بالمجتمع أولًا</h3>
+                        <p class="text-gray-500 arabic-text text-sm">دافعه إنه يساعد الناس ويتأكد إن الكل بيستفيد.</p>
+                    </div>
+                </div>
+                <div
+                    class="card p-6 bg-white hover:border-[var(--primary-blue)] border-2 border-transparent transition-all">
+                    <h3 class="font-bold text-xl text-[var(--dark-blue)] mb-2">3. Proactive & Reliable</h3>
+                    <p class="text-gray-600">They don't wait to be told what to do, and the team can trust a task will
+                        be done.</p>
+                    <div class="mt-4 pt-4 border-t border-gray-100">
+                        <h3 class="font-bold text-lg text-[var(--dark-blue)] mb-1 arabic-text">استباقي ويعتمد عليه</h3>
+                        <p class="text-gray-500 arabic-text text-sm">ما يستناش حد يقوله يعمل إيه، ولو استلم تاسك يخلصها.
+                        </p>
+                    </div>
+                </div>
+                <div
+                    class="card p-6 bg-white hover:border-[var(--primary-blue)] border-2 border-transparent transition-all">
+                    <h3 class="font-bold text-xl text-[var(--dark-blue)] mb-2">4. Growth-Oriented</h3>
+                    <p class="text-gray-600">Sees challenges as learning opportunities for technical and leadership
+                        skills.</p>
+                    <div class="mt-4 pt-4 border-t border-gray-100">
+                        <h3 class="font-bold text-lg text-[var(--dark-blue)] mb-1 arabic-text">يسعى للتطور</h3>
+                        <p class="text-gray-500 arabic-text text-sm">بيشوف التحديات فرص يتعلم منها ويطور نفسه.</p>
+                    </div>
+                </div>
+                <div
+                    class="card p-6 bg-white hover:border-[var(--primary-blue)] border-2 border-transparent transition-all">
+                    <h3 class="font-bold text-xl text-[var(--dark-blue)] mb-2">5. Resilient Problem-Solver</h3>
+                    <p class="text-gray-600">Stays positive, finds solutions, and helps move the team forward when
+                        things go wrong.</p>
+                    <div class="mt-4 pt-4 border-t border-gray-100">
+                        <h3 class="font-bold text-lg text-[var(--dark-blue)] mb-1 arabic-text">مرن وبيحل المشاكل</h3>
+                        <p class="text-gray-500 arabic-text text-sm">حتى لو الأمور ما مشتش كويس، بيبقى إيجابي ويدور على
+                            الحل.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Volunteer Guide -->
+        <section id="volunteer-guide" class="mb-12 text-center">
+            <button data-modal-target="guide-modal"
+                class="modal-trigger card p-6 px-12 font-bold text-xl text-white bg-[var(--dark-blue)] hover:bg-[var(--primary-blue)] transition-all duration-300 rounded-full shadow-lg transform hover:-translate-y-1">
+                Open The Core Team Guide
+            </button>
+        </section>
+
+        <!-- University Branches Map -->
+        <section id="branches">
+            <h2 class="text-4xl font-bold text-center section-title w-fit mx-auto">A Connected National Network</h2>
+            <p class="text-center text-gray-600 max-w-3xl mx-auto mt-[-1rem] mb-8 text-lg">
+                Our university chapters are not islands. They form a powerful, interconnected network across Egypt.
+            </p>
+            <div class="card p-2 bg-white">
+                <div id="map" class="w-full h-96 rounded-lg shadow-inner"></div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Modals -->
+    <div id="education-modal" class="modal-overlay">
+        <div class="modal-content">
+            <h3 class="text-2xl font-bold mb-4 text-[var(--dark-blue)]">Education & Training</h3>
+            <ul class="list-disc list-inside space-y-2 text-gray-700">
+                <li>Workshops</li>
+                <li>Bootcamps</li>
+                <li>Certification Study Groups (AZ-900, AI-900, or PL-900)</li>
+                <li>Coding Dojos / Katas</li>
+                <li>Project-Based Learning Sprints</li>
+            </ul>
+            <button
+                class="modal-close mt-6 bg-gray-200 text-gray-800 px-4 py-2 rounded-lg font-semibold hover:bg-gray-300">Close</button>
+        </div>
+    </div>
+
+    <div id="community-modal" class="modal-overlay">
+        <div class="modal-content">
+            <h3 class="text-2xl font-bold mb-4 text-[var(--dark-blue)]">Community & Networking</h3>
+            <ul class="list-disc list-inside space-y-2 text-gray-700">
+                <li>Guest Speaker Sessions</li>
+                <li>Alumni "Ask Me Anything" (AMA) Sessions</li>
+                <li>Mentorship Programs</li>
+                <li>Social & Gaming Events</li>
+            </ul>
+            <button
+                class="modal-close mt-6 bg-gray-200 text-gray-800 px-4 py-2 rounded-lg font-semibold hover:bg-gray-300">Close</button>
+        </div>
+    </div>
+
+    <div id="professional-modal" class="modal-overlay">
+        <div class="modal-content">
+            <h3 class="text-2xl font-bold mb-4 text-[var(--dark-blue)]">Professional Development</h3>
+            <ul class="list-disc list-inside space-y-2 text-gray-700">
+                <li>Resume & LinkedIn Clinics</li>
+                <li>Mock Technical Interviews</li>
+                <li>Career Fairs</li>
+                <li>Soft Skills Seminars</li>
+                <li>Portfolio Day</li>
+            </ul>
+            <button
+                class="modal-close mt-6 bg-gray-200 text-gray-800 px-4 py-2 rounded-lg font-semibold hover:bg-gray-300">Close</button>
+        </div>
+    </div>
+
+    <div id="impact-modal" class="modal-overlay">
+        <div class="modal-content">
+            <h3 class="text-2xl font-bold mb-4 text-[var(--dark-blue)]">High-Impact Initiatives</h3>
+            <ul class="list-disc list-inside space-y-2 text-gray-700">
+                <li>Hackathons</li>
+                <li>Annual Tech Summit</li>
+                <li>Inter-University Competitions</li>
+            </ul>
+            <button
+                class="modal-close mt-6 bg-gray-200 text-gray-800 px-4 py-2 rounded-lg font-semibold hover:bg-gray-300">Close</button>
+        </div>
+    </div>
+
+    <div id="digital-modal" class="modal-overlay">
+        <div class="modal-content">
+            <h3 class="text-2xl font-bold mb-4 text-[var(--dark-blue)]">Digital Content & Outreach</h3>
+            <ul class="list-disc list-inside space-y-2 text-gray-700">
+                <li>YouTube Series</li>
+                <li>Podcast</li>
+                <li>Technical Blog / Newsletter</li>
+                <li>Open Source Projects</li>
+            </ul>
+            <button
+                class="modal-close mt-6 bg-gray-200 text-gray-800 px-4 py-2 rounded-lg font-semibold hover:bg-gray-300">Close</button>
+        </div>
+    </div>
+
+    <div id="industry-modal" class="modal-overlay">
+        <div class="modal-content">
+            <h3 class="text-2xl font-bold mb-4 text-[var(--dark-blue)]">Industry Immersion</h3>
+            <ul class="list-disc list-inside space-y-2 text-gray-700">
+                <li>Professional Trips ("Tech Treks")</li>
+                <li>Job Shadowing Programs</li>
+                <li>Industry Problem Challenges</li>
+            </ul>
+            <button
+                class="modal-close mt-6 bg-gray-200 text-gray-800 px-4 py-2 rounded-lg font-semibold hover:bg-gray-300">Close</button>
+        </div>
+    </div>
+
+    <!-- Stakeholder Modals -->
+    <div id="students-modal" class="modal-overlay">
+        <div class="modal-content">
+            <h3 class="text-2xl font-bold mb-4 text-[var(--dark-blue)]">University Students (The Members)</h3>
+            <div class="space-y-4 text-gray-700">
+                <div>
+                    <h4 class="font-semibold">Who they are:</h4>
+                    <p>The core audience from across Egyptian universities seeking to gain skills and build their
+                        careers.</p>
+                </div>
+                <div>
+                    <h4 class="font-semibold">Relationship:</h4>
+                    <p>They are the community the club serves. Their active participation is the measure of success.</p>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-green-700">Gives:</h4>
+                    <p>Time, engagement, feedback, and a desire to learn.</p>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-[var(--microsoft-blue)]">Takes:</h4>
+                    <p>Practical tech skills, a strong project portfolio, career opportunities, and a peer network.</p>
+                </div>
+            </div>
+            <button
+                class="modal-close mt-6 bg-gray-200 text-gray-800 px-4 py-2 rounded-lg font-semibold hover:bg-gray-300">Close</button>
+        </div>
+    </div>
+
+    <div id="volunteers-modal" class="modal-overlay">
+        <div class="modal-content">
+            <h3 class="text-2xl font-bold mb-4 text-[var(--dark-blue)]">Club Volunteers (The Core Team)</h3>
+            <div class="space-y-4 text-gray-700">
+                <div>
+                    <h4 class="font-semibold">Who they are:</h4>
+                    <p>The dedicated students who organize, lead, and run all club activities.</p>
+                </div>
+                <div>
+                    <h4 class="font-semibold">Relationship:</h4>
+                    <p>They are the engine of the club.</p>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-green-700">Gives:</h4>
+                    <p>Time, passion, and leadership to plan events, teach workshops, and manage partnerships.</p>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-[var(--microsoft-blue)]">Takes:</h4>
+                    <p>Invaluable leadership and project management experience, deep networking opportunities, and a
+                        standout resume.</p>
+                </div>
+            </div>
+            <button
+                class="modal-close mt-6 bg-gray-200 text-gray-800 px-4 py-2 rounded-lg font-semibold hover:bg-gray-300">Close</button>
+        </div>
+    </div>
+
+    <div id="microsoft-modal" class="modal-overlay">
+        <div class="modal-content">
+            <h3 class="text-2xl font-bold mb-4 text-[var(--dark-blue)]">Microsoft (The Enabler)</h3>
+            <div class="space-y-4 text-gray-700">
+                <div>
+                    <h4 class="font-semibold">Who they are:</h4>
+                    <p>The global technology partner providing resources, legitimacy, and a technological focus.</p>
+                </div>
+                <div>
+                    <h4 class="font-semibold">Relationship:</h4>
+                    <p>The primary partner and sponsor.</p>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-green-700">Gives:</h4>
+                    <p>Official branding, access to programs like Microsoft Learn Student Ambassadors, software credits,
+                        learning materials, and connections to experts.</p>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-[var(--microsoft-blue)]">Takes:</h4>
+                    <p>A direct talent pipeline, brand advocacy on campus, product feedback, and a future generation of
+                        developers skilled in their ecosystem.</p>
+                </div>
+            </div>
+            <button
+                class="modal-close mt-6 bg-gray-200 text-gray-800 px-4 py-2 rounded-lg font-semibold hover:bg-gray-300">Close</button>
+        </div>
+    </div>
+
+    <div id="industry-stakeholder-modal" class="modal-overlay">
+        <div class="modal-content">
+            <h3 class="text-2xl font-bold mb-4 text-[var(--dark-blue)]">Industry (The Hirer)</h3>
+            <div class="space-y-4 text-gray-700">
+                <div>
+                    <h4 class="font-semibold">Who they are:</h4>
+                    <p>Local and international tech companies that need skilled talent.</p>
+                </div>
+                <div>
+                    <h4 class="font-semibold">Relationship:</h4>
+                    <p>The career destination for members.</p>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-green-700">Gives:</h4>
+                    <p>Sponsorship, expert speakers, mentors, real-world project ideas, and internship/job
+                        opportunities.</p>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-[var(--microsoft-blue)]">Takes:</h4>
+                    <p>Access to a curated pool of motivated and pre-skilled students, reducing hiring costs.</p>
+                </div>
+            </div>
+            <button
+                class="modal-close mt-6 bg-gray-200 text-gray-800 px-4 py-2 rounded-lg font-semibold hover:bg-gray-300">Close</button>
+        </div>
+    </div>
+
+    <!-- Volunteer Guide Modal -->
+    <div id="guide-modal" class="modal-overlay">
+        <div class="modal-content text-left">
+            <h3 class="text-2xl font-bold mb-4 text-[var(--dark-blue)]">The Core Team Guide: Welcome, Leader!</h3>
+            <p class="text-gray-700 font-semibold">We be designed later.</p>
+
+            <button
+                class="modal-close mt-8 bg-gray-200 text-gray-800 px-4 py-2 rounded-lg font-semibold hover:bg-gray-300 w-full">Close</button>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Modal functionality
+            const modalTriggers = document.querySelectorAll('.modal-trigger');
+            const modalOverlays = document.querySelectorAll('.modal-overlay');
+            const modalCloses = document.querySelectorAll('.modal-close');
+
+            modalTriggers.forEach(trigger => {
+                trigger.addEventListener('click', () => {
+                    const modalId = trigger.getAttribute('data-modal-target');
+                    document.getElementById(modalId).classList.add('active');
+                });
+            });
+
+            const closeModal = (modal) => {
+                if (modal) {
+                    modal.classList.remove('active');
+                }
+            };
+
+            modalCloses.forEach(button => {
+                button.addEventListener('click', () => {
+                    closeModal(button.closest('.modal-overlay'));
+                });
+            });
+
+            modalOverlays.forEach(overlay => {
+                overlay.addEventListener('click', (event) => {
+                    if (event.target === overlay) {
+                        closeModal(overlay);
+                    }
+                });
+            });
+
+            // Map initialization
+            const universities = [
+                { name: 'AOU', coords: [30.155551, 31.612913] },
+                { name: 'EELU', coords: [30.037884, 31.216889] },
+                { name: 'ASU', coords: [30.076872, 31.284546] },
+                { name: 'Aswan University', coords: [23.996635, 32.859941] },
+                { name: 'SAMS', coords: [29.960236, 31.248594] },
+                { name: 'KFS', coords: [31.097310, 30.947417] },
+                { name: 'NMU', coords: [31.462789, 31.454657] }
+            ];
+
+            const map = L.map('map').setView([26.8206, 30.8025], 6); // Centered on Egypt
+
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+                maxZoom: 19
+            }).addTo(map);
+
+            universities.forEach(uni => {
+                L.marker(uni.coords).addTo(map)
+                    .bindPopup(uni.name);
+            });
+
+            // Draw connecting lines
+            const lineStyle = {
+                color: 'var(--microsoft-blue)',
+                weight: 2,
+                opacity: 0.7
+            };
+
+            function createCurvedPath(p1, p2) {
+                const lat1 = p1[0], lng1 = p1[1];
+                const lat2 = p2[0], lng2 = p2[1];
+
+                // Midpoint
+                const mpx = (lng1 + lng2) / 2;
+                const mpy = (lat1 + lat2) / 2;
+
+                // Angle of the straight line
+                const angle = Math.atan2(lat2 - lat1, lng2 - lng1);
+                // Get a perpendicular angle
+                const perpAngle = angle - Math.PI / 2;
+                // Distance between points
+                const dist = Math.sqrt(Math.pow(lng2 - lng1, 2) + Math.pow(lat2 - lat1, 2));
+                // Adjust curvature
+                const curveFactor = 0.2;
+
+                // Calculate control point
+                const cpx = mpx + dist * curveFactor * Math.cos(perpAngle);
+                const cpy = mpy + dist * curveFactor * Math.sin(perpAngle);
+                const controlPoint = [cpy, cpx];
+
+                const curvePoints = [];
+                const numPoints = 100;
+                for (let t = 0; t <= 1; t += 1 / numPoints) {
+                    // Quadratic Bezier curve formula
+                    const lat = Math.pow(1 - t, 2) * lat1 + 2 * (1 - t) * t * controlPoint[0] + Math.pow(t, 2) * lat2;
+                    const lng = Math.pow(1 - t, 2) * lng1 + 2 * (1 - t) * t * controlPoint[1] + Math.pow(t, 2) * lng2;
+                    curvePoints.push([lat, lng]);
+                }
+                return curvePoints;
+            }
+
+            for (let i = 0; i < universities.length; i++) {
+                for (let j = i + 1; j < universities.length; j++) {
+                    const latlngs = createCurvedPath(universities[i].coords, universities[j].coords);
+                    L.polyline(latlngs, lineStyle).addTo(map);
+                }
+            }
+
+            // ADDED: Season selector logic
+            document.getElementById('seasonSelector').addEventListener('change', function () {
+                if (this.value) {
+                    window.location.href = this.value;
+                }
+            });
+        });
+    </script>
+
+</body>
+
+</html>
